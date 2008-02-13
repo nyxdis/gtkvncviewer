@@ -173,17 +173,15 @@ class GtkVncViewer:
 
 	def quit():
 		self.vnc.close()
+		print "Bye."
 		if (self.window):
 			self.window.destroy()
 
 	def close_window(self, widget, data):
-		#self.vnc.close()
-		self.quit()
+		quit()
 	
 	def disconnect(self, data):
-		#self.vnc.close()
-		#self.window.destroy()
-		self.quit()
+		quit()
 
 	def handle_about_dialog_answer(self, widget, data):
 		if(data==-6):
