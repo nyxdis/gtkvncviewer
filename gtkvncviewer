@@ -58,6 +58,8 @@ class GtkVncViewer:
 		gconfclient.add_dir (GCONF_AUTH_KEY,
 			gconf.CLIENT_PRELOAD_RECURSIVE)
 		entries = gconfclient.all_entries(GCONF_AUTH_KEY)
+		if len(entries) == 0:
+			return #found nothing
 		for i in range(len(entries)):
 			server = entries[i].get_key()
 			server = server.replace (GCONF_AUTH_KEY+"/", "")
@@ -99,10 +101,36 @@ class GtkVncViewer:
 		dialog.destroy()
 		if (r == gtk.RESPONSE_NO):
 			print "deletion canceled"
-			return
-
-		
-		print server+" deleted"
+		else:
+			GCONF_AUTH_KEY = "/apps/gtkvncviewer"	
+			gconfclient = gconf.client_get_default()
+			gconfclient.add_dir (GCONF_AUTH_KEY,
+				gconf.CLIENT_PRELOAD_RECURSIVE)
+			entry = gconfclient.get_entry(GCONF_AUTH_KEY+"/"+server,
+				"", False)
+			server = entry.get_key()
+			server = server.replace (GCONF_AUTH_KEY+"/", "")
+			auth_token = entry.get_value().get_int()
+			if auth_token > 0:
+				try:
+					#delete gnome-keyring entry
+					keyring = gnomekeyring.get_default_keyring_sync()
+					gnomekeyring.item_delete_sync(keyring, auth_token)
+					#delete gconf entry
+					gconfclient.unset(GCONF_AUTH_KEY+"/"+server)
+					#remove from icon view
+					select = self.iconview.get_selected_items()
+					if len(select) == 0:
+						return
+					i = select[0][0]
+					iter = self.model.get_iter(i)
+					self.model.remove(iter)
+					print server+" deleted"
+				except gnomekeyring.DeniedError:
+					auth_token = 0
+					print "gnome-keyring access denied, could not delete"
+			else:
+				print "gconf read error, could not delete"
 
 	def activated (self, widget, data):
 		self.vncconnect(self.window)
@@ -128,6 +156,8 @@ class GtkVncViewer:
 		username = self.wTree.get_widget("usernameEntry").get_text()
 		password = self.wTree.get_widget("pwdEntry").get_text()
 		server = self.wTree.get_widget("serverEntry").get_text()
+		if server == "":
+			return
 		self.model.append([server, username, password, pixbuf])
 
 		#now save it in gnome-keyring
