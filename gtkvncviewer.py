@@ -17,10 +17,19 @@ except:
 
 import os
 
+#internat'
+import locale
+import gettext
+APP = 'gtkvncviewer'
+DIR = 'locale'
+locale.setlocale(locale.LC_ALL, '')
+gettext.bindtextdomain(APP, DIR)
+gettext.textdomain(APP)
+_ = gettext.gettext
+
 class GtkVncViewer:
 
-	def __init__(self):
-		
+	def __init__(self):		
 		#build GUI
 		self.gladefile = "gtkvncviewer.glade"  
 	        self.wTree = gtk.glade.XML(self.gladefile) 
@@ -74,7 +83,7 @@ class GtkVncViewer:
 					username = None
 					password = None
 					auth_token = 0
-					print "gnome-keyring access denied"
+					print _("gnome-keyring access denied")
 				else:
 					username, password = secret.split('\n')
 			else:
@@ -91,14 +100,14 @@ class GtkVncViewer:
 			gtk.MESSAGE_INFO,
 			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 			gtk.BUTTONS_OK,
-			"Screenshot saved in "+homeDir+"/vnc.png")
+			_("Screenshot saved in")+" "+homeDir+"/vnc.png")
 		dialog.run()
 		dialog.destroy()
 
 	def delete_clicked (self, data):		
 		select = self.iconview.get_selected_items()
 		if len(select) == 0:
-			print "nothing to delete"
+			print _("nothing to delete")
 			return
 
 		i = select[0][0]
@@ -111,11 +120,11 @@ class GtkVncViewer:
 			gtk.MESSAGE_QUESTION,
 			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 			gtk.BUTTONS_YES_NO,
-			"Are you sure you want remove \""+server+"\" ?")
+			_("Are you sure you want remove")+" \"+server+"\" ?")
 		r = dialog.run()
 		dialog.destroy()
 		if (r == gtk.RESPONSE_NO):
-			print "deletion canceled"
+			print _("deletion canceled")
 		else:
 			GCONF_AUTH_KEY = "/apps/gtkvncviewer"	
 			gconfclient = gconf.client_get_default()
@@ -143,9 +152,9 @@ class GtkVncViewer:
 					print server+" deleted"
 				except gnomekeyring.DeniedError:
 					auth_token = 0
-					print "gnome-keyring access denied, could not delete"
+					print _("gnome-keyring access denied, could not delete")
 			else:
-				print "gconf read error, could not delete"
+				print _("gconf read error, could not delete")
 
 	def activated (self, widget, data):
 		self.vncconnect(self.window)
@@ -228,7 +237,7 @@ class GtkVncViewer:
 		self.vnc.connect("vnc-disconnected", self.vnc_disconnected, self.dialog)
 
 	def vnc_initialized (src, vnc, window, username, server, dialog, window_label, scrolled_window):
-		print "Connection initialized"
+		print _("Connection initialized")
 		title = "%s@%s - gtkvncviewer" % (username, server)
 		dialog.hide()
 		window.set_title(title)
@@ -238,18 +247,18 @@ class GtkVncViewer:
 		vnc.grab_focus()
 		
 	def vnc_disconnected(src, data, window):
-		print "Disconnected"
+		print _("Disconnected")
 		dialog = gtk.MessageDialog (window,
 			gtk.MESSAGE_INFO,
 			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 			gtk.BUTTONS_OK,
-			"You have been disconnected")
+			_("You have been disconnected"))
 		dialog.run()
 		dialog.destroy()
 		window.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.ARROW))
 
 	def vnc_connected(src, data):
-		print "Connected"
+		print _("Connected")
 
 if __name__ == "__main__":
 	instance = GtkVncViewer()
