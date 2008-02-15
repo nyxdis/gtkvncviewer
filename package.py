@@ -520,9 +520,9 @@ binary: binary-indep binary-arch
 
             #http://www.debian.org/doc/manuals/maint-guide/ch-build.fr.html
             #ret=os.system('cd "%(DEST)s"; dpkg-buildpackage -tc -rfakeroot -us -uc' % locals())
-            ret=os.system('cd "%(DEST)s"; dpkg-buildpackage -S -rfakeroot' % locals())
+            ret=os.system('cd "%(DEST)s"; dpkg-buildpackage -rfakeroot' % locals())
             os.system('rm -rf packages/gtkvncviewer')
-            return 0
+            ret = 0
             if ret!=0:
                 raise Py2debException("buildpackage failed (see output)")
 
@@ -532,7 +532,7 @@ binary: binary-indep binary-arch
 
             tdeb = l[0]
             deb = os.path.basename(tdeb)
-            shutil.move(tdeb,deb)
+            #shutil.move(tdeb,deb)
 
             ret=[deb,]
 
@@ -546,7 +546,7 @@ binary: binary-indep binary-arch
                     raise Py2debException("don't find source package tar.gz")
 
                 tar = os.path.basename(l[0])
-                shutil.move(l[0],tar)
+                #shutil.move(l[0],tar)
 
                 ret.append(tar)
 
@@ -574,8 +574,11 @@ if __name__ == "__main__":
     p=Py2deb("gtkvncviewer")
     p.author="Clement Lorteau"
     p.mail="northern_lights@users.sourceforge.net"
-    p.description="""Small GTK tool to connect to VNC servers which saves credentials in gnome-keyring."""
-    p.depends="python2.5, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc"
+    p.description="""Small GTK tool to connect to VNC servers.
+.
+GTK VNC Viewer keeps known credentials in gnome-keyring so connecting to your
+VNC servers is just a double-click away."""
+    p.depends="python, python2.5, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc"
     p.license="gpl"
     p.section="utils"
     p.arch="all"
@@ -584,6 +587,7 @@ if __name__ == "__main__":
     p["/usr/share/gtkvncviewer"] = ["gtkvncviewer.py", "gtkvncviewer.glade", "gtkvncviewer_14.png", "gtkvncviewer_64.png", "gtkvncviewer_128.png", "gtkvncviewer_128.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["gtkvncviewer.desktop",]
+    p["/usr/share/doc/gtkvncviewer"]=["AUTHORS",]
 
     print p
     raw_input("Press ENTER to generate the packages, or CTRL+C to cancel:")
