@@ -235,15 +235,24 @@ class GtkVncViewer:
 		window_label.set_markup ("<big><b>%s@%s</b></big>" % (username, server))
 		window.show_all()
 		window.resize (vnc.get_width(), vnc.get_height())
-		vnc.set_keyboard_grab(True)
+		#vnc.set_pointer_grab(True)
+		#vnc.set_keyboard_grab(True)
+		vnc.grab_focus()
+		#vnc.set_pointer_grab(False)
 		
-	def vnc_disconnected(src, data, dialog):
+	def vnc_disconnected(src, data, window):
 		print "Disconnected"
-		dialog.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.ARROW))
+		dialog = gtk.MessageDialog (window,
+			gtk.MESSAGE_INFO,
+			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+			gtk.BUTTONS_OK,
+			"You have been disconnected")
+		dialog.run()
+		dialog.destroy()
+		window.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.ARROW))
 
 	def vnc_connected(src, data):
 		print "Connected"
-
 
 if __name__ == "__main__":
 	instance = GtkVncViewer()
