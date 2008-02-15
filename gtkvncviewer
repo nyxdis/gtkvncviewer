@@ -1,3 +1,3 @@
 #!/bin/sh
-
-/usr/share/gtkvncviewer/gtkvncviewer.py
+cd /usr/share/gtkvncviewer
+./gtkvncviewer.py

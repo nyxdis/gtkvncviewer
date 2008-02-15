@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Wed Feb 13 19:21:39 2008 -->
+<!--Generated with glade3 3.4.0 on Fri Feb 15 20:08:10 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="connectDialog">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -322,7 +322,7 @@
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="has_separator">False</property>
     <property name="program_name">Gtk VNC Viewer</property>
-    <property name="version">0.1</property>
+    <property name="version">0.2</property>
     <property name="copyright" translatable="yes">(c) 2008 Clément Lorteau</property>
     <property name="comments" translatable="yes">Small GTK tool to connect to VNC servers.</property>
     <property name="license">		    GNU GENERAL PUBLIC LICENSE
@@ -722,12 +722,12 @@ Public License instead of this License.
             <child>
               <widget class="GtkButton" id="screenshotButton">
                 <property name="visible">True</property>
-                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="relief">GTK_RELIEF_NONE</property>
                 <property name="response_id">0</property>
+                <signal name="clicked" handler="on_screenshotButton_clicked"/>
                 <child>
                   <widget class="GtkHBox" id="hbox5">
                     <property name="visible">True</property>

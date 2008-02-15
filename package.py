@@ -569,7 +569,7 @@ if __name__ == "__main__":
         pass
     
     os.system('rm *~')
-    version="0.1-0ubuntu1"
+    version="0.2-0ubuntu1"
     changelog=open("CHANGELOG","r").read()
     
     #description

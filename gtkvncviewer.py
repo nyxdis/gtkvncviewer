@@ -15,6 +15,8 @@ try:
 except:
 	sys.exit(1)
 
+import os
+
 class GtkVncViewer:
 
 	def __init__(self):
@@ -47,7 +49,8 @@ class GtkVncViewer:
 				"on_addButton_clicked" : self.add_server,
 				"on_iconview1_selection_changed" : self.selected,
 				"on_iconview1_item_activated" : self.activated,
-				"on_delButton_clicked" : self.delete_clicked }
+				"on_delButton_clicked" : self.delete_clicked,
+				"on_screenshotButton_clicked" : self.screenshot }
 			self.wTree.signal_autoconnect(dic)
 			self.dialog.show()
 		
@@ -80,6 +83,18 @@ class GtkVncViewer:
 			pixbuf = self.iconview.render_icon(gtk.STOCK_NETWORK, gtk.ICON_SIZE_BUTTON)
 			self.model.append([server, username, password, pixbuf])
 	
+	def screenshot (self, data):
+		homeDir = os.environ.get('HOME', None)
+		pix = self.vnc.get_pixbuf()
+        	pix.save(homeDir+"/vnc.png", "png", { "tEXt::Generator App": "gtkvncviewer" })
+		dialog = gtk.MessageDialog (self.window,
+			gtk.MESSAGE_INFO,
+			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
+			gtk.BUTTONS_OK,
+			"Screenshot saved in "+homeDir+"/vnc.png")
+		dialog.run()
+		dialog.destroy()
+
 	def delete_clicked (self, data):		
 		select = self.iconview.get_selected_items()
 		if len(select) == 0:
@@ -220,6 +235,7 @@ class GtkVncViewer:
 		window_label.set_markup ("<big><b>%s@%s</b></big>" % (username, server))
 		window.show_all()
 		window.resize (vnc.get_width(), vnc.get_height())
+		vnc.set_keyboard_grab(True)
 		
 	def vnc_disconnected(src, data, dialog):
 		print "Disconnected"
