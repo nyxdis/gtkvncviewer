@@ -314,10 +314,10 @@ FILES :
             #==========================================================================
             txt="""Source: %(name)s
 Section: %(section)s
-Priority: extra
+Priority: optional
 Maintainer: %(author)s <%(mail)s>
+Standards-Version: 3.7.3
 Build-Depends: debhelper (>= 5)
-Standards-Version: 3.7.2
 
 Package: %(name)s
 Architecture: %(arch)s
@@ -520,8 +520,10 @@ binary: binary-indep binary-arch
 
             #http://www.debian.org/doc/manuals/maint-guide/ch-build.fr.html
             #ret=os.system('cd "%(DEST)s"; dpkg-buildpackage -tc -rfakeroot -us -uc' % locals())
-            ret=os.system('cd "%(DEST)s"; dpkg-buildpackage -rfakeroot' % locals())
+            os.system('cd "%(DEST)s"; dpkg-buildpackage -S -rfakeroot' % locals())
             os.system('rm -rf packages/gtkvncviewer')
+            os.system('cd "%(TEMP)s"; sudo pbuilder build *.dsc' % locals())
+            os.system('sudo mv /var/cache/pbuilder/result/%(name)s*.deb %(TEMP)s' % locals())
             ret = 0
             if ret!=0:
                 raise Py2debException("buildpackage failed (see output)")
@@ -584,7 +586,7 @@ VNC servers is just a double-click away."""
     p.arch="all"
     
     #files
-    p["/usr/share/gtkvncviewer"] = ["gtkvncviewer.py", "gtkvncviewer.glade", "gtkvncviewer_14.png", "gtkvncviewer_64.png", "gtkvncviewer_128.png", "gtkvncviewer_128.png",]
+    p["/usr/share/gtkvncviewer"] = ["gtkvncviewer.py", "gtkvncviewer.glade", "gtkvncviewer_14.png", "gtkvncviewer_64.png", "gtkvncviewer_128.png", "gtkvncviewer_192.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["gtkvncviewer.desktop",]
     p["/usr/share/doc/gtkvncviewer"]=["AUTHORS",]
