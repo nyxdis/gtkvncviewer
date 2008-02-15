@@ -2,3 +2,5 @@ gtk-vnc-viewer.pl~
 gtkvncviewer.pl~
 push
 make_deb.py
+build
+packages
