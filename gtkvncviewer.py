@@ -120,7 +120,7 @@ class GtkVncViewer:
 			gtk.MESSAGE_QUESTION,
 			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 			gtk.BUTTONS_YES_NO,
-			_("Are you sure you want remove")+" \"+server+"\" ?")
+			_("Are you sure you want remove")+" \""+server+"\" ?")
 		r = dialog.run()
 		dialog.destroy()
 		if (r == gtk.RESPONSE_NO):
