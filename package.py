@@ -569,7 +569,6 @@ if __name__ == "__main__":
         pass
     
     os.system('rm *~')
-    version="0.2-0ubuntu1"
     changelog=open("CHANGELOG","r").read()
     
     #description
@@ -594,4 +593,8 @@ VNC servers is just a double-click away."""
     print p
     raw_input("Press ENTER to generate the packages, or CTRL+C to cancel:")
     print "Generating..."
+
+    #ubuntu
+    version="0.2-0ubuntu1"
     p.generate(version, changelog, rpm=False, src=True)
+
