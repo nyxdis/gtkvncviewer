@@ -45,6 +45,7 @@ class GtkVncViewer:
 		self.iconview.set_model(self.model)
 		self.iconview.set_text_column(0)
 		self.iconview.set_pixbuf_column(3)
+		
 		if (self.dialog):
 			self.window.connect("destroy", gtk.main_quit)
 			#Create our dictionay and connect it
@@ -170,8 +171,14 @@ class GtkVncViewer:
 		iter = self.model.get_iter(i)
 		s = self.model.get(iter,0,1,2)
 		server.set_text(s[0])
-		username.set_text(s[1])
-		password.set_text(s[2])
+		if (s[1] != None):
+			username.set_text(s[1])
+		else:
+			username.set_text("")
+		if (s[2] != None):
+			password.set_text(s[2])
+		else:
+			password.set_text("")
 	
 	def add_server (self, data):
 
@@ -221,8 +228,8 @@ class GtkVncViewer:
 	def vncconnect(self, window):
 		#layout = self.wTree.get_widget("viewport1")
 		self.dialog.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
-		self.layout.add(self.vnc)
-		self.vnc.realize()
+		#self.layout.add(self.vnc)
+		#self.vnc.realize()
 		username = self.wTree.get_widget("usernameEntry").get_text()
 		password = self.wTree.get_widget("pwdEntry").get_text()
 		server = self.wTree.get_widget("serverEntry").get_text()
@@ -232,9 +239,9 @@ class GtkVncViewer:
 		print "Connecting to %s..." % server
 		self.vnc.open_host(server, "5900")
 		#vnc.connect("vnc-auth-credential", self.vnc_auth_cred)
-		self.vnc.connect("vnc-connected", self.vnc_connected)
+		self.vnc.connect("vnc-connected", self.vnc_connected, self)
 		self.vnc.connect("vnc-initialized", self.vnc_initialized, self.window, username, server, self.dialog, self.window_label, self.scrolledwindow)
-		self.vnc.connect("vnc-disconnected", self.vnc_disconnected, self.dialog)
+		self.vnc.connect("vnc-disconnected", self.vnc_disconnected, self.dialog, self)
 
 	def vnc_initialized (src, vnc, window, username, server, dialog, window_label, scrolled_window):
 		print _("Connection initialized")
@@ -246,7 +253,7 @@ class GtkVncViewer:
 		window.resize (vnc.get_width(), vnc.get_height())
 		vnc.grab_focus()
 		
-	def vnc_disconnected(src, data, window):
+	def vnc_disconnected(src, vnc, window, self):
 		print _("Disconnected")
 		dialog = gtk.MessageDialog (window,
 			gtk.MESSAGE_INFO,
@@ -255,10 +262,14 @@ class GtkVncViewer:
 			_("You have been disconnected"))
 		dialog.run()
 		dialog.destroy()
+		self.vnc.destroy()
+		self.vnc=gtkvnc.Display()
 		window.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.ARROW))
 
-	def vnc_connected(src, data):
+	def vnc_connected(src, data, self):
 		print _("Connected")
+		self.layout.add(self.vnc)
+		self.vnc.realize()
 
 if __name__ == "__main__":
 	instance = GtkVncViewer()
