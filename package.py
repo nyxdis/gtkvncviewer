@@ -595,6 +595,6 @@ VNC servers is just a double-click away."""
     print "Generating..."
 
     #ubuntu
-    version="0.2-0ubuntu1"
+    version="0.2.1-0ubuntu1"
     p.generate(version, changelog, rpm=False, src=True)
 
