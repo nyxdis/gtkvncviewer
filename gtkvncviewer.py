@@ -14,6 +14,11 @@ try:
 	import gnomekeyring
 except:
 	sys.exit(1)
+try:
+	import LaunchpadIntegration
+	launchpad = True
+except:
+	launchpad = False
 
 import os
 
@@ -29,7 +34,7 @@ _ = gettext.gettext
 
 class GtkVncViewer:
 
-	def __init__(self):		
+	def __init__(self):	
 		#build GUI
 		self.gladefile = "gtkvncviewer.glade"  
 	        self.wTree = gtk.glade.XML(self.gladefile) 
@@ -45,6 +50,14 @@ class GtkVncViewer:
 		self.iconview.set_model(self.model)
 		self.iconview.set_text_column(0)
 		self.iconview.set_pixbuf_column(3)
+		self.helpMenu = self.wTree.get_widget("helpMenu")
+		self.helpButton = self.wTree.get_widget("helpButton")
+		self.helpMenu.attach_to_widget(self.helpButton, None)
+		if (launchpad):
+			LaunchpadIntegration.set_sourcepackagename("gtkvncviewer")
+			LaunchpadIntegration.add_items(self.helpMenu,0,False,False)
+		else:
+			self.helpButton.set_sensitive(False)
 		
 		if (self.dialog):
 			self.window.connect("destroy", gtk.main_quit)
@@ -60,7 +73,8 @@ class GtkVncViewer:
 				"on_iconview1_selection_changed" : self.selected,
 				"on_iconview1_item_activated" : self.activated,
 				"on_delButton_clicked" : self.delete_clicked,
-				"on_screenshotButton_clicked" : self.screenshot }
+				"on_screenshotButton_clicked" : self.screenshot,
+				"on_helpButton_clicked" : self.helpMenuPop}
 			self.wTree.signal_autoconnect(dic)
 			self.dialog.show()
 		
@@ -92,6 +106,9 @@ class GtkVncViewer:
 				password = None
 			pixbuf = self.iconview.render_icon(gtk.STOCK_NETWORK, gtk.ICON_SIZE_BUTTON)
 			self.model.append([server, username, password, pixbuf])
+	
+	def helpMenuPop (self, data):
+		self.helpMenu.popup(None, None, None, 0, 0, gtk.get_current_event_time())
 	
 	def screenshot (self, data):
 		homeDir = os.environ.get('HOME', None)
