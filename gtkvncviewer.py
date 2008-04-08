@@ -30,6 +30,11 @@ DIR = 'locale'
 locale.setlocale(locale.LC_ALL, '')
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
+gtk.glade.bindtextdomain(APP, DIR)
+gtk.glade.textdomain(APP)
+gettext.install(APP, DIR, unicode=1)
+#lang = gettext.translation(APP, DIR, languages=['ar'])
+#lang.install()
 _ = gettext.gettext
 
 class GtkVncViewer:
