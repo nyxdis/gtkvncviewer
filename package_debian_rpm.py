@@ -585,10 +585,19 @@ VNC servers is just a double-click away."""
     p.arch="all"
     
     #files
-    p["/usr/share/gtkvncviewer"] = ["gtkvncviewer.py", "gtkvncviewer.glade", "gtkvncviewer_14.png", "gtkvncviewer_64.png", "gtkvncviewer_128.png", "gtkvncviewer_192.png",]
+    usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
-    p["/usr/share/applications"]=["gtkvncviewer.desktop",]
+    p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
     p["/usr/share/doc/gtkvncviewer"]=["AUTHORS",]
+
+    #mo files
+    locale_dirs = os.listdir("locale")
+    for i in range(len(locale_dirs)):
+	dir = locale_dirs[i]
+	to_add = "locale/"+dir+"/LC_MESSAGES/gtkvncviewer.mo"
+	usr_share_gtkvncviewer.append(to_add)
+    
+    p["/usr/share/gtkvncviewer"] = usr_share_gtkvncviewer
 
     print p
     raw_input("Press ENTER to generate the packages, or CTRL+C to cancel:")

@@ -20,13 +20,12 @@ from glob import glob
 from datetime import datetime
 import socket # gethostname()
 
-__version__ = "0.3"
+__version__ = "0.3-gtkvncviewer"
 __author__ = "manatlan"
 __mail__ = "manatlan@gmail.com"
 
 """
 Known limitations :
-- don't sign package (-us -uc)
 - no distinctions between author and maintainer(packager)
 
 depends on :
@@ -34,6 +33,8 @@ depends on :
 - alien
 - python
 - fakeroot
+
+Modified to suit gtkvncviewer (https://launchpad.net/gtkvncviewer)
 
 """
 from subprocess import Popen,PIPE
@@ -105,7 +106,7 @@ class Py2deb(object):
                 if file==nfile:         # and not renamed (pipe trick)
                     nfile=os.path.basename(file)   # it's simply copied to 'path'
 
-            nfiles.append( (file,nfile) )
+            nfiles.append( (file,nfile) )         
 
         nfiles.sort( lambda a,b :cmp(a[1],b[1]))    #sort according new name (nfile)
 
@@ -585,16 +586,25 @@ VNC servers is just a double-click away."""
     p.arch="all"
     
     #files
-    p["/usr/share/gtkvncviewer"] = ["data/gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
+    usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
     p["/usr/share/doc/gtkvncviewer"]=["AUTHORS",]
+
+    #mo files
+    locale_dirs = os.listdir("locale")
+    for i in range(len(locale_dirs)):
+	dir = locale_dirs[i]
+	to_add = "locale/"+dir+"/LC_MESSAGES/gtkvncviewer.mo"
+	usr_share_gtkvncviewer.append(to_add)
+    
+    p["/usr/share/gtkvncviewer"] = usr_share_gtkvncviewer
 
     print p
     raw_input("Press ENTER to generate the packages, or CTRL+C to cancel:")
     print "Generating..."
 
     #ubuntu
-    version="0.2.1-0ubuntu1"
+    version="0.2.2-0ubuntu1"
     p.generate(version, changelog, rpm=False, src=True)
 
