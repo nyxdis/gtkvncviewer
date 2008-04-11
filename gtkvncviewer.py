@@ -41,7 +41,7 @@ class GtkVncViewer:
 
 	def __init__(self):	
 		#build GUI
-		self.gladefile = "gtkvncviewer.glade"  
+		self.gladefile = "data/gtkvncviewer.glade"  
 	        self.wTree = gtk.glade.XML(self.gladefile) 
 		self.dialog = self.wTree.get_widget("connectDialog")
 		self.about = self.wTree.get_widget("aboutDialog")

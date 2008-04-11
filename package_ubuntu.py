@@ -585,9 +585,9 @@ VNC servers is just a double-click away."""
     p.arch="all"
     
     #files
-    p["/usr/share/gtkvncviewer"] = ["gtkvncviewer.py", "gtkvncviewer.glade", "gtkvncviewer_14.png", "gtkvncviewer_64.png", "gtkvncviewer_128.png", "gtkvncviewer_192.png",]
+    p["/usr/share/gtkvncviewer"] = ["data/gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
-    p["/usr/share/applications"]=["gtkvncviewer.desktop",]
+    p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
     p["/usr/share/doc/gtkvncviewer"]=["AUTHORS",]
 
     print p
