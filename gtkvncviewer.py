@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+#Gtk VNC Viewer
+#http://launchpad.net/gtkvncviewer
+#(c) Clement Lorteau <northern_lights@users.sourceforge.net>
 
 import sys
 try:
@@ -49,6 +52,8 @@ class GtkVncViewer:
 		self.window_label = self.wTree.get_widget("window_label")
 		self.layout = self.wTree.get_widget("viewport1")
 		self.scrolledwindow = self.wTree.get_widget("scrolledwindow1")
+		self.fullscreenButton = self.wTree.get_widget("fullscreenButton")
+		self.fullscreenButton.set_active(False)
 		self.iconview = self.wTree.get_widget("iconview1")
 		self.vnc=gtkvnc.Display()
 		self.model = gtk.ListStore (str,str,str,gtk.gdk.Pixbuf)
@@ -79,7 +84,8 @@ class GtkVncViewer:
 				"on_iconview1_item_activated" : self.activated,
 				"on_delButton_clicked" : self.delete_clicked,
 				"on_screenshotButton_clicked" : self.screenshot,
-				"on_helpButton_clicked" : self.helpMenuPop}
+				"on_helpButton_clicked" : self.helpMenuPop,
+				"on_togglebutton1_toggled" : self.fullscreen}
 			self.wTree.signal_autoconnect(dic)
 			self.dialog.show()
 		
@@ -112,6 +118,12 @@ class GtkVncViewer:
 			pixbuf = self.iconview.render_icon(gtk.STOCK_NETWORK, gtk.ICON_SIZE_BUTTON)
 			self.model.append([server, username, password, pixbuf])
 	
+	def fullscreen (self, data):
+		if (self.fullscreenButton.get_active()):
+			self.window.fullscreen()
+		else:
+			self.window.unfullscreen()
+
 	def helpMenuPop (self, data):
 		self.helpMenu.popup(None, None, None, 0, 0, gtk.get_current_event_time())
 	
