@@ -20,7 +20,7 @@ from glob import glob
 from datetime import datetime
 import socket # gethostname()
 
-__version__ = "0.3"
+__version__ = "0.3-gtkvncviewer"
 __author__ = "manatlan"
 __mail__ = "manatlan@gmail.com"
 
@@ -34,6 +34,8 @@ depends on :
 - alien
 - python
 - fakeroot
+
+Modified to suit gtkvncviewer (https://launchpad.net/gtkvncviewer)
 
 """
 from subprocess import Popen,PIPE
@@ -604,6 +606,6 @@ VNC servers is just a double-click away."""
     print "Generating..."
 
     #debian, rpm
-    version="0.2.1"
+    version="0.2.2"
     p.generate(version, changelog, rpm=True, src=True)
 
