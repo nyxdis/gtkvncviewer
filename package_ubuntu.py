@@ -26,6 +26,7 @@ __mail__ = "manatlan@gmail.com"
 
 """
 Known limitations :
+- don't sign package (-us -uc)
 - no distinctions between author and maintainer(packager)
 
 depends on :
@@ -106,7 +107,7 @@ class Py2deb(object):
                 if file==nfile:         # and not renamed (pipe trick)
                     nfile=os.path.basename(file)   # it's simply copied to 'path'
 
-            nfiles.append( (file,nfile) )         
+            nfiles.append( (file,nfile) )
 
         nfiles.sort( lambda a,b :cmp(a[1],b[1]))    #sort according new name (nfile)
 
@@ -187,7 +188,7 @@ FILES :
 %(files)s
 """ % locals()
 
-    def generate(self,version,changelog="",rpm=False,src=False):
+    def generate(self,version,changelog="",rpm=False,src=False, debrev="0"):
         """ generate a deb of version 'version', with or without 'changelog', with or without a rpm
             (in the current folder)
             return a list of generated files
@@ -235,7 +236,7 @@ FILES :
 
         #TEMP = ".py2deb_build_folder"
         TEMP = "packages"
-        DEST = os.path.join(TEMP,name)
+        DEST = os.path.join(TEMP,name+"-"+version)
         DEBIAN = os.path.join(DEST,"debian")
 
         # let's start the process
@@ -291,12 +292,12 @@ FILES :
             #==========================================================================
             # CREATE debian/dirs
             #==========================================================================
-            open(os.path.join(DEBIAN,"dirs"),"w").write("\n".join(dirs))
+            open(os.path.join(DEBIAN,"dirs"),"w").write("\n".join(dirs)+"\n")
 
             #==========================================================================
             # CREATE debian/changelog
             #==========================================================================
-            clog="""%(name)s (%(version)s) hardy; urgency=low
+            clog="""%(name)s (%(version)s-%(debrev)s) hardy; urgency=low
 
   %(changelog)s
 
@@ -324,7 +325,7 @@ Package: %(name)s
 Architecture: %(arch)s
 Depends: %(depends)s
 Description: %(description)s""" % locals()
-            open(os.path.join(DEBIAN,"control"),"w").write(txt)
+            open(os.path.join(DEBIAN,"control"),"w").write(txt+"\n")
 
             #==========================================================================
             # CREATE debian/copyright
@@ -521,10 +522,12 @@ binary: binary-indep binary-arch
 
             #http://www.debian.org/doc/manuals/maint-guide/ch-build.fr.html
             #ret=os.system('cd "%(DEST)s"; dpkg-buildpackage -tc -rfakeroot -us -uc' % locals())
+	    os.system('cd packages ; tar -zcf %(name)s_%(version)s.orig.tar.gz * --exclude "%(name)s-%(version)s/debian"' % locals())
             os.system('cd "%(DEST)s"; dpkg-buildpackage -S -rfakeroot' % locals())
             os.system('rm -rf packages/gtkvncviewer')
             os.system('cd "%(TEMP)s"; sudo pbuilder build *.dsc' % locals())
             os.system('sudo mv /var/cache/pbuilder/result/%(name)s*.deb %(TEMP)s' % locals())
+	    os.system('rm -rf %(DEST)s' % locals())
             ret = 0
             if ret!=0:
                 raise Py2debException("buildpackage failed (see output)")
@@ -580,7 +583,7 @@ if __name__ == "__main__":
 .
 GTK VNC Viewer keeps known credentials in gnome-keyring so connecting to your
 VNC servers is just a double-click away."""
-    p.depends="python, python2.5, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc"
+    p.depends="python, python2.5, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc, libgnome-keyring0"
     p.license="gpl"
     p.section="utils"
     p.arch="all"
@@ -605,6 +608,6 @@ VNC servers is just a double-click away."""
     print "Generating..."
 
     #ubuntu
-    version="0.2.2-0ubuntu1"
-    p.generate(version, changelog, rpm=False, src=True)
+    version="0.2.2"
+    p.generate(version, changelog, rpm=False, src=True, debrev="0ubuntu4")
 
