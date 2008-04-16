@@ -528,6 +528,7 @@ binary: binary-indep binary-arch
             os.system('cd "%(TEMP)s"; sudo pbuilder build *.dsc' % locals())
             os.system('sudo mv /var/cache/pbuilder/result/%(name)s*.deb %(TEMP)s' % locals())
 	    os.system('rm -rf %(DEST)s' % locals())
+	    os.system('cd packages ; cp %(name)s_%(version)s.orig.tar.gz %(name)s-%(version)s.tar.gz' % locals())
             ret = 0
             if ret!=0:
                 raise Py2debException("buildpackage failed (see output)")
@@ -547,7 +548,7 @@ binary: binary-indep binary-arch
                 ret.append(rpm)
 
             if src:
-                l=glob("%(TEMP)s/%(name)s*.tar.gz"%locals())
+                l=glob("%(TEMP)s/%(name)s-%(version)s.tar.gz"%locals())
                 if len(l)!=1:
                     raise Py2debException("don't find source package tar.gz")
 
@@ -607,8 +608,7 @@ VNC servers is just a double-click away."""
     raw_input("Press ENTER to generate the packages, or CTRL+C to cancel:")
     print "Generating..."
 
-    #debian, rpm
+    #debian
     version="0.2.2"
-    #debrev="1"
     p.generate(version, changelog, rpm=False, src=True, debrev="1")
 
