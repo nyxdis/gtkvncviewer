@@ -268,12 +268,8 @@ FILES :
 
                         ndir = os.path.join(path,os.path.dirname(nfile))
                         nname = os.path.basename(nfile)
-
-                        # make a line RULES to be sure the destination folder is created
-                        # and one for copying the file
-                        fpath = "/".join(["$(CURDIR)","debian",name+ndir])
-                        rules.append('mkdir -p "%s"' % fpath)
-                        rules.append('cp -a "%s" "%s"' % (file,os.path.join(fpath,nname)))
+                        if not ndir == "":
+                            rules.append('dh_install "%s" "%s"' % (file, ndir))
 
                         # append a dir
                         dirs.append(ndir)
@@ -291,19 +287,12 @@ FILES :
             #==========================================================================
             # CREATE debian/dirs
             #==========================================================================
-            open(os.path.join(DEBIAN,"dirs"),"w").write("\n".join(dirs)+"\n")
+            #open(os.path.join(DEBIAN,"dirs"),"w").write("\n".join(dirs)+"\n")
 
             #==========================================================================
             # CREATE debian/changelog
             #==========================================================================
-            clog="""%(name)s (%(version)s-%(debrev)s) unstable; urgency=low
-
-  %(changelog)s
-
- -- %(author)s <%(mail)s>  %(buildDate)s
-""" % locals()
-
-            open(os.path.join(DEBIAN,"changelog"),"w").write(clog)
+            os.system("cp "+changelog+" "+DEBIAN+"/changelog")
 
             #==========================================================================
             # CREATE debian/compat
@@ -453,13 +442,7 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-
-	# ======================================================
-	#$(MAKE) DESTDIR="$(CURDIR)/debian/%(name)s" install
-	mkdir -p "$(CURDIR)/debian/%(name)s"
-
 	%(rules)s
-	# ======================================================
 
 binary-arch: build install
 
@@ -545,7 +528,7 @@ if __name__ == "__main__":
         pass
     
     os.system('rm *~')
-    changelog=open("CHANGELOG","r").read()
+    changelog="CHANGELOG.debian"
     
     #description
     p=Py2deb("gtkvncviewer")
@@ -564,7 +547,8 @@ shown in an icon view."""
     usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
-    p["/usr/share/doc/gtkvncviewer"]=["AUTHORS","LICENSE","gtkvncviewer.1"]
+    p["/usr/share/doc/gtkvncviewer"]=["AUTHORS","LICENSE","CHANGELOG",]
+    p[""]=["gtkvncviewer.1",]
 
     #mo files
     locale_dirs = os.listdir("locale")

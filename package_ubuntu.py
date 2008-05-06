@@ -26,7 +26,6 @@ __mail__ = "manatlan@gmail.com"
 
 """
 Known limitations :
-- don't sign package (-us -uc)
 - no distinctions between author and maintainer(packager)
 
 depends on :
@@ -77,8 +76,8 @@ class Py2deb(object):
             raise Py2debException("value of key path '%s' is not a list"%path)
         if not files:
             raise Py2debException("value of key path '%s' should'nt be empty"%path)
-        if not path.startswith("/"):
-            raise Py2debException("key path '%s' malformed (don't start with '/')"%path)
+        #if not path.startswith("/"):
+        #    raise Py2debException("key path '%s' malformed (don't start with '/')"%path)
         if path.endswith("/"):
             raise Py2debException("key path '%s' malformed (shouldn't ends with '/')"%path)
 
@@ -126,8 +125,8 @@ class Py2deb(object):
                     arch="all",
 
                     url="",
-                    author = os.environ["USERNAME"],
-                    mail = os.environ["USERNAME"]+"@"+socket.gethostname()
+                    author = "",
+                    mail = ""
                 ):
 
         self.name = name
@@ -269,12 +268,8 @@ FILES :
 
                         ndir = os.path.join(path,os.path.dirname(nfile))
                         nname = os.path.basename(nfile)
-
-                        # make a line RULES to be sure the destination folder is created
-                        # and one for copying the file
-                        fpath = "/".join(["$(CURDIR)","debian",name+ndir])
-                        rules.append('mkdir -p "%s"' % fpath)
-                        rules.append('cp -a "%s" "%s"' % (file,os.path.join(fpath,nname)))
+                        if not ndir == "":
+                            rules.append('dh_install "%s" "%s"' % (file, ndir))
 
                         # append a dir
                         dirs.append(ndir)
@@ -292,19 +287,12 @@ FILES :
             #==========================================================================
             # CREATE debian/dirs
             #==========================================================================
-            open(os.path.join(DEBIAN,"dirs"),"w").write("\n".join(dirs)+"\n")
+            #open(os.path.join(DEBIAN,"dirs"),"w").write("\n".join(dirs)+"\n")
 
             #==========================================================================
             # CREATE debian/changelog
             #==========================================================================
-            clog="""%(name)s (%(version)s-%(debrev)s) hardy; urgency=low
-
-  %(changelog)s
-
- -- %(author)s <%(mail)s>  %(buildDate)s
-""" % locals()
-
-            open(os.path.join(DEBIAN,"changelog"),"w").write(clog)
+            os.system("cp "+changelog+" "+DEBIAN+"/changelog")
 
             #==========================================================================
             # CREATE debian/compat
@@ -319,11 +307,14 @@ Section: %(section)s
 Priority: optional
 Maintainer: %(author)s <%(mail)s>
 Standards-Version: 3.7.3
-Build-Depends: debhelper (>= 5)
+XS-Python-Version: current
+Build-Depends: debhelper (>= 5.0.38), python-central (>= 0.5.6)
+Homepage: http://launchpad.net/gtkvncviewer
 
 Package: %(name)s
 Architecture: %(arch)s
 Depends: %(depends)s
+XB-Python-Version: ${python:Versions}
 Description: %(description)s""" % locals()
             open(os.path.join(DEBIAN,"control"),"w").write(txt+"\n")
 
@@ -400,7 +391,7 @@ can be found in `/usr/share/common-licenses/Artistic'.
 
             txtLicense = copy[license]
             pv=__version__
-            txt="""This package was py2debianized(%(pv)s) by %(author)s <%(mail)s> on
+            txt="""This package was debianized by %(author)s <%(mail)s> on
 %(buildDate)s.
 
 Upstream Author: %(author)s <%(mail)s>
@@ -434,32 +425,16 @@ is licensed under the GPL, see above.
 
 
 
-CFLAGS = -Wall -g
-
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
-else
-	CFLAGS += -O2
-endif
-
-configure: configure-stamp
-configure-stamp:
-	dh_testdir
-	# Add here commands to configure the package.
-
-	touch configure-stamp
-
-
 build: build-stamp
 
-build-stamp: configure-stamp
+build-stamp:
 	dh_testdir
 	touch build-stamp
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp configure-stamp
+	rm -f build-stamp
 	dh_clean
 
 install: build
@@ -467,43 +442,22 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-
-	# ======================================================
-	#$(MAKE) DESTDIR="$(CURDIR)/debian/%(name)s" install
-	mkdir -p "$(CURDIR)/debian/%(name)s"
-
 	%(rules)s
-	# ======================================================
 
-# Build architecture-independent files here.
-binary-indep: build install
-# We have nothing to do by default.
-
-# Build architecture-dependent files here.
 binary-arch: build install
+
+binary-indep: build install
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs debian/changelog
+	dh_pycentral
+	dh_installchangelogs
 	dh_installdocs
 	dh_installexamples
-#	dh_install
-#	dh_installmenu
-#	dh_installdebconf
-#	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installpam
-#	dh_installmime
-#	dh_python
-#	dh_installinit
-#	dh_installcron
-#	dh_installinfo
-	dh_installman
+	dh_installman gtkvncviewer.1
 	dh_link
 	dh_strip
 	dh_compress
 	dh_fixperms
-#	dh_perl
-#	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
@@ -511,7 +465,7 @@ binary-arch: build install
 	dh_builddeb
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+.PHONY: build clean binary-indep binary-arch binary install
 """ % locals()
             open(os.path.join(DEBIAN,"rules"),"w").write(txt)
             os.chmod(os.path.join(DEBIAN,"rules"),0755)
@@ -574,17 +528,17 @@ if __name__ == "__main__":
         pass
     
     os.system('rm *~')
-    changelog=open("CHANGELOG","r").read()
+    changelog="CHANGELOG.ubuntu"
     
     #description
     p=Py2deb("gtkvncviewer")
     p.author="Clement Lorteau"
     p.mail="northern_lights@users.sourceforge.net"
     p.description="""Small GTK tool to connect to VNC servers.
-.
-GTK VNC Viewer keeps known credentials in gnome-keyring so connecting to your
-VNC servers is just a double-click away."""
-    p.depends="python, python2.5, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc, libgnome-keyring0"
+GTK VNC Viewer is a script that provides a GUI for connecting to VNC servers. It remembers the 
+credentials of known servers, so connecting to a VNC server is just one double-click away. Servers are 
+shown in an icon view."""
+    p.depends="${python:Depends}, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc"
     p.license="gpl"
     p.section="utils"
     p.arch="all"
@@ -593,7 +547,8 @@ VNC servers is just a double-click away."""
     usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
-    p["/usr/share/doc/gtkvncviewer"]=["AUTHORS",]
+    p["/usr/share/doc/gtkvncviewer"]=["AUTHORS","LICENSE","CHANGELOG",]
+    p[""]=["gtkvncviewer.1",]
 
     #mo files
     locale_dirs = os.listdir("locale")
@@ -608,7 +563,7 @@ VNC servers is just a double-click away."""
     raw_input("Press ENTER to generate the packages, or CTRL+C to cancel:")
     print "Generating..."
 
-    #ubuntu
-    version="0.2.2"
-    p.generate(version, changelog, rpm=False, src=True, debrev="0ubuntu4")
+    #debian
+    version="0.2.3"
+    p.generate(version, changelog, rpm=False, src=True, debrev="0ubuntu1")
 
