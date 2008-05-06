@@ -76,8 +76,8 @@ class Py2deb(object):
             raise Py2debException("value of key path '%s' is not a list"%path)
         if not files:
             raise Py2debException("value of key path '%s' should'nt be empty"%path)
-        if not path.startswith("/"):
-            raise Py2debException("key path '%s' malformed (don't start with '/')"%path)
+        #if not path.startswith("/"):
+        #    raise Py2debException("key path '%s' malformed (don't start with '/')"%path)
         if path.endswith("/"):
             raise Py2debException("key path '%s' malformed (shouldn't ends with '/')"%path)
 
@@ -318,11 +318,14 @@ Section: %(section)s
 Priority: optional
 Maintainer: %(author)s <%(mail)s>
 Standards-Version: 3.7.3
-Build-Depends: debhelper (>= 5)
+XS-Python-Version: current
+Build-Depends: debhelper (>= 5.0.38), python-central (>= 0.5.6)
+Homepage: http://launchpad.net/gtkvncviewer
 
 Package: %(name)s
 Architecture: %(arch)s
 Depends: %(depends)s
+XB-Python-Version: ${python:Versions}
 Description: %(description)s""" % locals()
             open(os.path.join(DEBIAN,"control"),"w").write(txt+"\n")
 
@@ -399,7 +402,7 @@ can be found in `/usr/share/common-licenses/Artistic'.
 
             txtLicense = copy[license]
             pv=__version__
-            txt="""This package was py2debianized(%(pv)s) by %(author)s <%(mail)s> on
+            txt="""This package was debianized by %(author)s <%(mail)s> on
 %(buildDate)s.
 
 Upstream Author: %(author)s <%(mail)s>
@@ -440,7 +443,6 @@ build-stamp:
 	touch build-stamp
 
 clean:
-	echo "dh_testdir"
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
@@ -464,10 +466,11 @@ binary-arch: build install
 binary-indep: build install
 	dh_testdir
 	dh_testroot
-	dh_installchangelog
+	dh_pycentral
+	dh_installchangelogs
 	dh_installdocs
 	dh_installexamples
-	dh_installman
+	dh_installman gtkvncviewer.1
 	dh_link
 	dh_strip
 	dh_compress
@@ -551,10 +554,8 @@ if __name__ == "__main__":
     p.description="""Small GTK tool to connect to VNC servers.
 GTK VNC Viewer is a script that provides a GUI for connecting to VNC servers. It remembers the 
 credentials of known servers, so connecting to a VNC server is just one double-click away. Servers are 
-shown in an icon view.
-
-Homepage: http://launchpad.net/gtkvncviewer"""
-    p.depends="python, python2.5, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc"
+shown in an icon view."""
+    p.depends="${python:Depends}, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc"
     p.license="gpl"
     p.section="utils"
     p.arch="all"
@@ -563,7 +564,7 @@ Homepage: http://launchpad.net/gtkvncviewer"""
     usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
-    p["/usr/share/doc/gtkvncviewer"]=["AUTHORS","LICENSE",]
+    p["/usr/share/doc/gtkvncviewer"]=["AUTHORS","LICENSE","gtkvncviewer.1"]
 
     #mo files
     locale_dirs = os.listdir("locale")
