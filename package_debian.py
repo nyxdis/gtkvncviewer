@@ -26,7 +26,6 @@ __mail__ = "manatlan@gmail.com"
 
 """
 Known limitations :
-- don't sign package (-us -uc)
 - no distinctions between author and maintainer(packager)
 
 depends on :
@@ -126,8 +125,8 @@ class Py2deb(object):
                     arch="all",
 
                     url="",
-                    author = os.environ["USERNAME"],
-                    mail = os.environ["USERNAME"]+"@"+socket.gethostname()
+                    author = "",
+                    mail = ""
                 ):
 
         self.name = name
@@ -434,32 +433,17 @@ is licensed under the GPL, see above.
 
 
 
-CFLAGS = -Wall -g
-
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
-else
-	CFLAGS += -O2
-endif
-
-configure: configure-stamp
-configure-stamp:
-	dh_testdir
-	# Add here commands to configure the package.
-
-	touch configure-stamp
-
-
 build: build-stamp
 
-build-stamp: configure-stamp
+build-stamp:
 	dh_testdir
 	touch build-stamp
 
 clean:
+	echo "dh_testdir"
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp configure-stamp
+	rm -f build-stamp
 	dh_clean
 
 install: build
@@ -475,35 +459,19 @@ install: build
 	%(rules)s
 	# ======================================================
 
-# Build architecture-independent files here.
-binary-indep: build install
-# We have nothing to do by default.
-
-# Build architecture-dependent files here.
 binary-arch: build install
+
+binary-indep: build install
 	dh_testdir
 	dh_testroot
-	dh_installchangelogs debian/changelog
+	dh_installchangelog
 	dh_installdocs
 	dh_installexamples
-#	dh_install
-#	dh_installmenu
-#	dh_installdebconf
-#	dh_installlogrotate
-#	dh_installemacsen
-#	dh_installpam
-#	dh_installmime
-#	dh_python
-#	dh_installinit
-#	dh_installcron
-#	dh_installinfo
 	dh_installman
 	dh_link
 	dh_strip
 	dh_compress
 	dh_fixperms
-#	dh_perl
-#	dh_makeshlibs
 	dh_installdeb
 	dh_shlibdeps
 	dh_gencontrol
@@ -511,7 +479,7 @@ binary-arch: build install
 	dh_builddeb
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+.PHONY: build clean binary-indep binary-arch binary install
 """ % locals()
             open(os.path.join(DEBIAN,"rules"),"w").write(txt)
             os.chmod(os.path.join(DEBIAN,"rules"),0755)
@@ -581,10 +549,12 @@ if __name__ == "__main__":
     p.author="Clement Lorteau"
     p.mail="northern_lights@users.sourceforge.net"
     p.description="""Small GTK tool to connect to VNC servers.
-.
-GTK VNC Viewer keeps known credentials in gnome-keyring so connecting to your
-VNC servers is just a double-click away."""
-    p.depends="python, python2.5, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc, libgnome-keyring0"
+GTK VNC Viewer is a script that provides a GUI for connecting to VNC servers. It remembers the 
+credentials of known servers, so connecting to a VNC server is just one double-click away. Servers are 
+shown in an icon view.
+
+Homepage: http://launchpad.net/gtkvncviewer"""
+    p.depends="python, python2.5, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc"
     p.license="gpl"
     p.section="utils"
     p.arch="all"
@@ -593,7 +563,7 @@ VNC servers is just a double-click away."""
     usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
-    p["/usr/share/doc/gtkvncviewer"]=["AUTHORS",]
+    p["/usr/share/doc/gtkvncviewer"]=["AUTHORS","LICENSE",]
 
     #mo files
     locale_dirs = os.listdir("locale")
@@ -609,6 +579,6 @@ VNC servers is just a double-click away."""
     print "Generating..."
 
     #debian
-    version="0.2.2"
+    version="0.2.3"
     p.generate(version, changelog, rpm=False, src=True, debrev="1")
 
