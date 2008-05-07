@@ -240,7 +240,7 @@ FILES :
 
         # let's start the process
         try:
-            shutil.rmtree(TEMP)
+            shutil.rmtree(DEST)
         except:
             pass
 
@@ -473,8 +473,6 @@ binary: binary-indep binary-arch
 
             ###########################################################################
             ###########################################################################
-            ###########################################################################
-
             #http://www.debian.org/doc/manuals/maint-guide/ch-build.fr.html
             #ret=os.system('cd "%(DEST)s"; dpkg-buildpackage -tc -rfakeroot -us -uc' % locals())
 	    if not os.access('packages/%(name)s_%(version)s.orig.tar.gz' % locals(),os.F_OK):
@@ -491,7 +489,7 @@ binary: binary-indep binary-arch
                 raise Py2debException("buildpackage failed (see output)")
 
             l=glob("%(TEMP)s/%(name)s*.deb"%locals())
-            if len(l)!=1:
+            if len(l)==0:
                 raise Py2debException("don't find builded deb")
 
             tdeb = l[0]

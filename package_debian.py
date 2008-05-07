@@ -240,7 +240,7 @@ FILES :
 
         # let's start the process
         try:
-            shutil.rmtree(TEMP)
+            shutil.rmtree(DEST)
         except:
             pass
 
@@ -490,7 +490,7 @@ binary: binary-indep binary-arch
                 raise Py2debException("buildpackage failed (see output)")
 
             l=glob("%(TEMP)s/%(name)s*.deb"%locals())
-            if len(l)!=1:
+            if len(l)==0:
                 raise Py2debException("don't find builded deb")
 
             tdeb = l[0]
