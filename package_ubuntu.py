@@ -305,7 +305,8 @@ FILES :
             txt="""Source: %(name)s
 Section: %(section)s
 Priority: optional
-Maintainer: %(author)s <%(mail)s>
+Maintainer: Ubuntu MOTU Developers <ubuntu-motu@lists.ubuntu.com>
+XSBC-Original-Maintainer: %(author)s <%(mail)s>
 Standards-Version: 3.7.3
 XS-Python-Version: current
 Build-Depends: debhelper (>= 5.0.38), python-central (>= 0.5.6)
@@ -476,13 +477,15 @@ binary: binary-indep binary-arch
 
             #http://www.debian.org/doc/manuals/maint-guide/ch-build.fr.html
             #ret=os.system('cd "%(DEST)s"; dpkg-buildpackage -tc -rfakeroot -us -uc' % locals())
-	    os.system('cd packages ; tar -zcf %(name)s_%(version)s.orig.tar.gz * --exclude "%(name)s-%(version)s/debian"' % locals())
+	    if not os.access('packages/%(name)s_%(version)s.orig.tar.gz' % locals(),os.F_OK):
+	        os.system('cd packages ; tar -zcf %(name)s_%(version)s.orig.tar.gz * --exclude "%(name)s-%(version)s/debian"' % locals())
             os.system('cd "%(DEST)s"; dpkg-buildpackage -S -rfakeroot' % locals())
             os.system('rm -rf packages/gtkvncviewer')
             os.system('cd "%(TEMP)s"; sudo pbuilder build *.dsc' % locals())
             os.system('sudo mv /var/cache/pbuilder/result/%(name)s*.deb %(TEMP)s' % locals())
 	    os.system('rm -rf %(DEST)s' % locals())
-	    os.system('cd packages ; cp %(name)s_%(version)s.orig.tar.gz %(name)s-%(version)s.tar.gz' % locals())
+            if not os.access('packages/%(name)s_%(version)s.tar.gz' % locals(),os.F_OK):
+	        os.system('cd packages ; cp %(name)s_%(version)s.orig.tar.gz %(name)s-%(version)s.tar.gz' % locals())
             ret = 0
             if ret!=0:
                 raise Py2debException("buildpackage failed (see output)")
