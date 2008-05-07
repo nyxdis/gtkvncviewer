@@ -1,5 +1,5 @@
 gtkvncviewer (0.2.3-1) unstable; urgency=low
 
-  * First Debian package.
+  * First Debian package. Closes: #480055.
 
- -- Clement Lorteau <northern_lights@users.sourceforge.net>  Tue, 06 May 2008 21:26:25 +0200
+ -- Clement Lorteau <northern_lights@users.sourceforge.net>  Wed, 07 May 2008 23:36:57 +0200

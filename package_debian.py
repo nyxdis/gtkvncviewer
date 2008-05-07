@@ -76,8 +76,6 @@ class Py2deb(object):
             raise Py2debException("value of key path '%s' is not a list"%path)
         if not files:
             raise Py2debException("value of key path '%s' should'nt be empty"%path)
-        #if not path.startswith("/"):
-        #    raise Py2debException("key path '%s' malformed (don't start with '/')"%path)
         if path.endswith("/"):
             raise Py2debException("key path '%s' malformed (shouldn't ends with '/')"%path)
 
@@ -168,21 +166,6 @@ class Py2deb(object):
         files = "\n".join(files)
 
         return """
-----------------------------------------------------------------------
-NAME        : %(name)s
-----------------------------------------------------------------------
-LICENSE     : %(license)s
-URL         : %(url)s
-AUTHOR      : %(author)s
-MAIL        : %(mail)s
-----------------------------------------------------------------------
-DEPENDS     : %(depends)s
-ARCH        : %(arch)s
-SECTION     : %(section)s
-----------------------------------------------------------------------
-DESCRIPTION :
-%(description)s
-----------------------------------------------------------------------
 FILES :
 %(files)s
 """ % locals()
@@ -248,6 +231,7 @@ FILES :
         try:
             rules=[]
             dirs=[]
+            docs=[]
             for path in files:
                 for file,nfile in files[path]:
                     if os.path.isfile(file):
@@ -268,8 +252,12 @@ FILES :
 
                         ndir = os.path.join(path,os.path.dirname(nfile))
                         nname = os.path.basename(nfile)
-                        if not ndir == "":
-                            rules.append('dh_install "%s" "%s"' % (file, ndir))
+                        if ndir == "":
+                            pass
+                        elif ndir == "_docs/":
+                            docs.append('%s\n' % (file))
+                        else:
+                            rules.append('%s %s\n' % (file, ndir))
 
                         # append a dir
                         dirs.append(ndir)
@@ -277,8 +265,12 @@ FILES :
                     else:
                         raise Py2debException("unknown file '' "%file) # shouldn't be raised (because controlled before)
 
-            # make rules right
-            rules= "\n\t".join(rules) +  "\n"
+            #write package.install
+            open(os.path.join(DEBIAN,name+".install"),"w").write("".join(rules))
+
+            #write package.docs
+            if len(docs) != 0:
+                open(os.path.join(DEBIAN,name+".docs"),"w").write("".join(docs))
 
             # make dirs right
             dirs= [ i[1:] for i in set(dirs)]
@@ -419,12 +411,6 @@ is licensed under the GPL, see above.
 # dh-make output file, you may use that output file without restriction.
 # This special exception was added by Craig Small in version 0.37 of dh-make.
 
-# Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
-
-
-
-
 build: build-stamp
 
 build-stamp:
@@ -442,7 +428,7 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	%(rules)s
+	dh_install
 
 binary-arch: build install
 
@@ -450,7 +436,7 @@ binary-indep: build install
 	dh_testdir
 	dh_testroot
 	dh_pycentral
-	dh_installchangelogs
+	dh_installchangelogs CHANGELOG
 	dh_installdocs
 	dh_installexamples
 	dh_installman gtkvncviewer.1
@@ -470,14 +456,12 @@ binary: binary-indep binary-arch
             open(os.path.join(DEBIAN,"rules"),"w").write(txt)
             os.chmod(os.path.join(DEBIAN,"rules"),0755)
 
-            ###########################################################################
-            ###########################################################################
-            ###########################################################################
-
-            #http://www.debian.org/doc/manuals/maint-guide/ch-build.fr.html
-            #ret=os.system('cd "%(DEST)s"; dpkg-buildpackage -tc -rfakeroot -us -uc' % locals())
+            ###
+            #GO
+            ###
             if not os.access('packages/%(name)s_%(version)s.orig.tar.gz' % locals(),os.F_OK):
 	        os.system('cd packages ; tar -zcf %(name)s_%(version)s.orig.tar.gz * --exclude "%(name)s-%(version)s/debian"' % locals())
+            #raw_input("---")
             os.system('cd "%(DEST)s"; dpkg-buildpackage -S -rfakeroot' % locals())
             os.system('rm -rf packages/gtkvncviewer')
             os.system('cd "%(TEMP)s"; sudo pbuilder build *.dsc' % locals())
@@ -495,8 +479,6 @@ binary: binary-indep binary-arch
 
             tdeb = l[0]
             deb = os.path.basename(tdeb)
-            #shutil.move(tdeb,deb)
-
             ret=[deb,]
 
             if rpm:
@@ -509,14 +491,9 @@ binary: binary-indep binary-arch
                     raise Py2debException("don't find source package tar.gz")
 
                 tar = os.path.basename(l[0])
-                #shutil.move(l[0],tar)
-
                 ret.append(tar)
 
             return ret
-
-        #~ except Exception,m:
-            #~ raise Py2debException("build error :"+str(m))
 
         finally:
             if Py2deb.clear:
@@ -536,10 +513,10 @@ if __name__ == "__main__":
     p=Py2deb("gtkvncviewer")
     p.author="Clement Lorteau"
     p.mail="northern_lights@users.sourceforge.net"
-    p.description="""Small GTK tool to connect to VNC servers.
-GTK VNC Viewer is a script that provides a GUI for connecting to VNC servers. It remembers the 
-credentials of known servers, so connecting to a VNC server is just one double-click away. Servers are 
-shown in an icon view."""
+    p.description="""Small GTK+ tool to connect to VNC servers
+This script provides a GUI for connecting to VNC servers. It remembers the
+credentials of known servers, so connecting to a VNC server is just one
+double-click away. Servers are shown in an icon view."""
     p.depends="${python:Depends}, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc"
     p.license="gpl"
     p.section="utils"
@@ -549,8 +526,8 @@ shown in an icon view."""
     usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
-    p["/usr/share/doc/gtkvncviewer"]=["AUTHORS","LICENSE","CHANGELOG",]
-    p[""]=["gtkvncviewer.1",]
+    p["_docs"]=["AUTHORS",]
+    p[""]=["gtkvncviewer.1","LICENSE", "CHANGELOG",]
 
     #mo files
     locale_dirs = os.listdir("locale")
