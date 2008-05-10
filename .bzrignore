@@ -9,3 +9,5 @@ screenshots
 locale_codes.txt
 update_locales.sh
 pull
+01_remove_encoding_key_in_desktop_file.dpatch
+debian

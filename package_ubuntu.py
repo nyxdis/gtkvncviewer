@@ -232,6 +232,7 @@ FILES :
             rules=[]
             dirs=[]
             docs=[]
+            patches=[]
             for path in files:
                 for file,nfile in files[path]:
                     if os.path.isfile(file):
@@ -256,6 +257,8 @@ FILES :
                             pass
                         elif ndir == "_docs/":
                             docs.append('%s\n' % (file))
+                        elif "patches" in ndir:
+                            patches.append('%s\n' % (file.replace("debian/patches/", "")))
                         else:
                             rules.append('%s %s\n' % (file, ndir))
 
@@ -267,6 +270,10 @@ FILES :
 
             #write package.install
             open(os.path.join(DEBIAN,name+".install"),"w").write("".join(rules))
+
+            #write patches list
+            if len(patches) != 0:
+                open(os.path.join(DEBIAN,"patches/00list"),"w").write("".join(patches))
 
             #write package.docs
             if len(docs) != 0:
@@ -301,7 +308,8 @@ Maintainer: Ubuntu MOTU Developers <ubuntu-motu@lists.ubuntu.com>
 XSBC-Original-Maintainer: %(author)s <%(mail)s> 
 Standards-Version: 3.7.3
 XS-Python-Version: current
-Build-Depends: debhelper (>= 5.0.38), python-central (>= 0.5.6)
+Build-Depends: debhelper (>= 5.0.38)
+Build-Depends-Indep: python-central (>= 0.5.6), dpatch
 Homepage: http://launchpad.net/gtkvncviewer
 
 Package: %(name)s
@@ -411,6 +419,8 @@ is licensed under the GPL, see above.
 # As a special exception, when this file is copied by dh-make into a
 # dh-make output file, you may use that output file without restriction.
 # This special exception was added by Craig Small in version 0.37 of dh-make.
+.NOTPARALLEL:
+
 
 build: build-stamp
 
@@ -418,7 +428,19 @@ build-stamp:
 	dh_testdir
 	touch build-stamp
 
-clean:
+patch: patch-stamp
+
+patch-stamp:
+	dpatch apply-all
+	dpatch cat-all >patch-stamp
+
+unpatch:
+	dpatch deapply-all
+	rm -rf patch-stamp debian/patched
+
+clean: clean-patched unpatch
+
+clean-patched:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
@@ -431,9 +453,9 @@ install: build
 	dh_installdirs
 	dh_install
 
-binary-arch: build install
+binary-arch: patch build install
 
-binary-indep: build install
+binary-indep: patch build install
 	dh_testdir
 	dh_testroot
 	dh_pycentral
@@ -529,6 +551,7 @@ double-click away. Servers are shown in an icon view."""
     p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
     p["_docs"]=["AUTHORS",]
     p[""]=["gtkvncviewer.1","LICENSE", "CHANGELOG",]
+    p["_patches"]=["debian/patches/01_remove_encoding_key_in_desktop_file.dpatch",]
 
     #mo files
     locale_dirs = os.listdir("locale")
