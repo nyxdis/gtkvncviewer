@@ -550,7 +550,7 @@ double-click away. Servers are shown in an icon view."""
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
     p["_docs"]=["AUTHORS",]
-    p[""]=["gtkvncviewer.1","LICENSE", "CHANGELOG",]
+    p[""]=["gtkvncviewer.1","LICENSE", "CHANGELOG",, "TODO"]
     p["_patches"]=["debian/patches/01_remove_encoding_key_in_desktop_file.dpatch",]
 
     #mo files
