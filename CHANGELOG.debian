@@ -1,5 +1,5 @@
-gtkvncviewer (0.2.4) unstable; urgency=low
+gtkvncviewer (0.3) unstable; urgency=low
 
-  * New upstream release. Closes: #xxxxxx.
+  * New upstream release.
 
  -- Clement Lorteau <northern_lights@users.sourceforge.net>  Mon, 12 May 2008 14:41:41 +0200

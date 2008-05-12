@@ -568,6 +568,6 @@ double-click away. Servers are shown in an icon view."""
     print "Generating..."
 
     #debian
-    version="0.2.4"
-    p.generate(version, changelog, rpm=False, src=True, debrev="1")
+    version="0.3"
+    p.generate(version, changelog, rpm=False, src=True, debrev="")
 

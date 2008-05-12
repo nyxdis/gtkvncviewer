@@ -1,6 +1,8 @@
 20080512
 	* $gtkvncviewer <server> automatically connects to server
 	* Removed deprecated Encoding key in .desktop file
+	* Auto hide/show toolbar when in fullscreen
+	* Added feature to create desktop icons pointing to a server
 
 20080506
 	* Added License file

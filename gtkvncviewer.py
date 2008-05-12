@@ -3,7 +3,7 @@
 #http://launchpad.net/gtkvncviewer
 #(c) Clement Lorteau <northern_lights@users.sourceforge.net>
 
-version = "0.2.4"
+version = "0.3"
 
 import sys
 try:
@@ -18,6 +18,7 @@ try:
 	import gconf
 	import gnomekeyring
 	from optparse import OptionParser
+	import gobject
 except:
 	sys.exit(1)
 try:
@@ -59,6 +60,8 @@ class GtkVncViewer:
 		self.about.set_version(version)
 		self.window = self.wTree.get_widget("window")
 		self.window_label = self.wTree.get_widget("window_label")
+		self.window_toolbar_note = self.wTree.get_widget("toolbar_note")
+		self.window_toolbar = self.wTree.get_widget("toolbar")
 		self.layout = self.wTree.get_widget("viewport1")
 		self.scrolledwindow = self.wTree.get_widget("scrolledwindow1")
 		self.fullscreenButton = self.wTree.get_widget("fullscreenButton")
@@ -94,7 +97,10 @@ class GtkVncViewer:
 				"on_delButton_clicked" : self.delete_clicked,
 				"on_screenshotButton_clicked" : self.screenshot,
 				"on_helpButton_clicked" : self.helpMenuPop,
-				"on_togglebutton1_toggled" : self.fullscreen}
+				"on_togglebutton1_toggled" : self.fullscreen,
+				"on_toolbar_note_entered" : self.show_hide_toolbar,
+				"on_window_motion_notify_event" : self.mouse_moved_in_window,
+				"on_desktopIconButton_clicked" : self.icon_on_desktop}
 			self.wTree.signal_autoconnect(dic)
 			self.dialog.show()
 		
@@ -144,8 +150,13 @@ class GtkVncViewer:
 	def fullscreen (self, data):
 		if (self.fullscreenButton.get_active()):
 			self.window.fullscreen()
+			self.window_toolbar_note.show_all()
+			self.window_toolbar.hide_all()
 		else:
 			self.window.unfullscreen()
+			self.window_toolbar_note.hide_all()
+			self.window_toolbar.show_all()
+		return False
 
 	def helpMenuPop (self, data):
 		self.helpMenu.popup(None, None, None, 0, 0, gtk.get_current_event_time())
@@ -161,6 +172,7 @@ class GtkVncViewer:
 			_("Screenshot saved in")+" "+homeDir+"/vnc.png")
 		dialog.run()
 		dialog.destroy()
+		return False
 
 	def delete_clicked (self, data):		
 		select = self.iconview.get_selected_items()
@@ -250,7 +262,6 @@ class GtkVncViewer:
                 return False
 	
 	def add_server (self, data):
-
 		#add it to the iconview
 		pixbuf = self.iconview.render_icon(gtk.STOCK_NETWORK, gtk.ICON_SIZE_BUTTON)
 		username = self.wTree.get_widget("usernameEntry").get_text()
@@ -273,15 +284,47 @@ class GtkVncViewer:
 
 	def quit():
 		self.vnc.close()
-		print "Bye."
+		print _("Bye.")
 		if (self.window):
 			self.window.destroy()
 
 	def close_window(self, widget, data):
 		quit()
+		return False
 	
 	def disconnect(self, data):
 		quit()
+
+	def show_hide_toolbar(self, widget, data):
+		print "show_hide_toolbar"
+		return False
+
+	#if in fullscreen and mouse on top, show toolbar
+	def mouse_moved_in_window(self, widget, data):
+		coords = self.window.window.get_pointer()
+		y = coords[1]
+		if y <= 5 and self.fullscreenButton.get_active():
+			self.window_toolbar.show_all()
+			#setup timer that will hide toolbar when ended
+			gobject.timeout_add(2000, self.window_toolbar.hide_all) #2 sec.
+
+	def icon_on_desktop(self, data):
+		server = self.current_server
+		comment = _("Connect to the remote desktop: %s" % (server))
+		text = """
+[Desktop Entry]
+Name=%s
+Comment=%s
+Exec=gtkvncviewer -s %s
+Icon=/usr/share/gtkvncviewer/data/gtkvncviewer_64.png
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Network;
+""" % ("VNC: "+server, comment, server)
+		open(os.path.join(os.environ['HOME']+"/Desktop",
+				  server+".desktop"),"w").write(text):
+			
 
 	def handle_about_dialog_answer(self, widget, data):
 		if(data==-6):
@@ -295,31 +338,30 @@ class GtkVncViewer:
 		return True
 
 	def vncconnect(self, window):
-		#layout = self.wTree.get_widget("viewport1")
 		self.dialog.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
-		#self.layout.add(self.vnc)
-		#self.vnc.realize()
 		username = self.wTree.get_widget("usernameEntry").get_text()
 		password = self.wTree.get_widget("pwdEntry").get_text()
 		server = self.wTree.get_widget("serverEntry").get_text()
 		self.vnc.set_credential(gtkvnc.CREDENTIAL_USERNAME, username)
 		self.vnc.set_credential(gtkvnc.CREDENTIAL_PASSWORD, password)
 		self.vnc.set_credential(gtkvnc.CREDENTIAL_CLIENTNAME, "gtkvncviewer")
-		print "Connecting to %s..." % server
+		print _("Connecting to %s...") % server 
 		self.vnc.open_host(server, "5900")
 		#vnc.connect("vnc-auth-credential", self.vnc_auth_cred)
 		self.vnc.connect("vnc-connected", self.vnc_connected, self)
-		self.vnc.connect("vnc-initialized", self.vnc_initialized, self.window, username, server, self.dialog, self.window_label, self.scrolledwindow)
+		self.vnc.connect("vnc-initialized", self.vnc_initialized, username, server, self)
 		self.vnc.connect("vnc-disconnected", self.vnc_disconnected, self.dialog, self)
 
-	def vnc_initialized (src, vnc, window, username, server, dialog, window_label, scrolled_window):
+	def vnc_initialized (src, vnc, username, server, self):
 		print _("Connection initialized")
 		title = "%s@%s - gtkvncviewer" % (username, server)
-		dialog.hide()
-		window.set_title(title)
-		window_label.set_markup ("<big><b>%s@%s</b></big>" % (username, server))
-		window.show_all()
-		window.resize (vnc.get_width(), vnc.get_height())
+		self.current_server = server
+		self.dialog.hide()
+		self.window.set_title(title)
+		self.window_label.set_markup ("<big><b>%s@%s</b></big>" % (username, server))
+		self.window.show_all()
+		self.window_toolbar_note.hide_all()
+		self.window.resize (vnc.get_width(), vnc.get_height())
 		vnc.grab_focus()
 		
 	def vnc_disconnected(src, vnc, window, self):
