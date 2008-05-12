@@ -323,7 +323,7 @@ Type=Application
 Categories=Network;
 """ % ("VNC: "+server, comment, server)
 		open(os.path.join(os.environ['HOME']+"/Desktop",
-				  server+".desktop"),"w").write(text):
+				  server+".desktop"),"w").write(text)
 			
 
 	def handle_about_dialog_answer(self, widget, data):
