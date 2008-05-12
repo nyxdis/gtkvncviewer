@@ -3,6 +3,8 @@
 #http://launchpad.net/gtkvncviewer
 #(c) Clement Lorteau <northern_lights@users.sourceforge.net>
 
+version = "0.2.4"
+
 import sys
 try:
  	import pygtk
@@ -15,6 +17,7 @@ try:
 	import gtkvnc
 	import gconf
 	import gnomekeyring
+	from optparse import OptionParser
 except:
 	sys.exit(1)
 try:
@@ -40,14 +43,20 @@ gettext.install(APP, DIR, unicode=1)
 #lang.install()
 _ = gettext.gettext
 
+def wait():
+   while gtk.events_pending():
+         gtk.main_iteration()
+
 class GtkVncViewer:
 
-	def __init__(self):	
+	def __init__(self):
+                self.parse_options()	
 		#build GUI
 		self.gladefile = "data/gtkvncviewer.glade"  
 	        self.wTree = gtk.glade.XML(self.gladefile) 
 		self.dialog = self.wTree.get_widget("connectDialog")
 		self.about = self.wTree.get_widget("aboutDialog")
+		self.about.set_version(version)
 		self.window = self.wTree.get_widget("window")
 		self.window_label = self.wTree.get_widget("window_label")
 		self.layout = self.wTree.get_widget("viewport1")
@@ -117,6 +126,20 @@ class GtkVncViewer:
 				password = None
 			pixbuf = self.iconview.render_icon(gtk.STOCK_NETWORK, gtk.ICON_SIZE_BUTTON)
 			self.model.append([server, username, password, pixbuf])
+
+		#if a server was specified at startup, connect to it
+		if self.startup_options.server:
+			res = self.find_server(self.startup_options.server)
+			if (res): #found, connect
+				iter = res[3]
+				self.iconview.select_path(iter)
+				wait()
+				self.vncconnect(self.window)
+			else: #not found, just fill the server name in the dialog
+				server_textbox = self.wTree.get_widget("serverEntry")
+				user_textbox = self.wTree.get_widget("usernameEntry")
+				server_textbox.set_text(self.startup_options.server)
+				user_textbox.grab_focus()
 	
 	def fullscreen (self, data):
 		if (self.fullscreenButton.get_active()):
@@ -213,6 +236,18 @@ class GtkVncViewer:
 			password.set_text(s[2])
 		else:
 			password.set_text("")
+
+	#finds the server 'name', and return its credentials and its path
+	#if not found, return False
+	def find_server (self, name):
+		iter = self.model.get_iter_first()
+		while (iter != None):
+			row = self.model.get(iter, 0, 1, 2)  #server, username, pwd
+			if row[0] == name:
+				row += ( self.model.get_path(iter), )
+				return row
+			iter = self.model.iter_next(iter)
+                return False
 	
 	def add_server (self, data):
 
@@ -304,6 +339,15 @@ class GtkVncViewer:
 		print _("Connected")
 		self.layout.add(self.vnc)
 		self.vnc.realize()
+
+        def parse_options(self):
+		parser = OptionParser()
+		parser.add_option("-s", "--server", dest="server",
+				  action="store", type="string",
+				  help=_("if server is known by gtkvncviewer, immediately connect to it"),
+				  metavar=_("server"))
+		(options, args) = parser.parse_args()
+		self.startup_options = options
 
 if __name__ == "__main__":
 	instance = GtkVncViewer()

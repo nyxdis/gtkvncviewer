@@ -1,3 +1,7 @@
+20080512
+	* $gtkvncviewer <server> automatically connects to server
+	* Removed deprecated Encoding key in .desktop file
+
 20080506
 	* Added License file
 

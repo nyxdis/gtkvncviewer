@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Gtk VNC Viewer
 Comment=Connect to your VNC servers
 Exec=gtkvncviewer

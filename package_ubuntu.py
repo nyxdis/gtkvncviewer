@@ -550,8 +550,8 @@ double-click away. Servers are shown in an icon view."""
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
     p["_docs"]=["AUTHORS",]
-    p[""]=["gtkvncviewer.1","LICENSE", "CHANGELOG",, "TODO"]
-    p["_patches"]=["debian/patches/01_remove_encoding_key_in_desktop_file.dpatch",]
+    p[""]=["gtkvncviewer.1","LICENSE", "CHANGELOG", "TODO"]
+    #p["_patches"]=["debian/patches/01_remove_encoding_key_in_desktop_file.dpatch",]
 
     #mo files
     locale_dirs = os.listdir("locale")
@@ -567,6 +567,6 @@ double-click away. Servers are shown in an icon view."""
     print "Generating..."
 
     #debian
-    version="0.2.3"
+    version="0.2.4"
     p.generate(version, changelog, rpm=False, src=True, debrev="0ubuntu1~ppa1")
 
