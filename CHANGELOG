@@ -1,3 +1,6 @@
+20080513
+	* Added send keys feature
+
 20080512
 	* $gtkvncviewer <server> automatically connects to server
 	* Removed deprecated Encoding key in .desktop file

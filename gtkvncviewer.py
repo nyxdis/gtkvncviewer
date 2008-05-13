@@ -106,7 +106,8 @@ class GtkVncViewer:
 				"on_desktopIconButton_clicked" : self.icon_on_desktop,
 				"on_CtrlAltDelmenuitem_activate": self.send_cad,
 				"on_CtrlAltBackmenuitem_activate": self.send_cab,
-				"on_CtrlEscmenuitem_activate": self.send_ce}
+				"on_CtrlEscmenuitem_activate": self.send_ce,
+				"on_keysButton_clicked" : self.keysMenuPop}
 			self.wTree.signal_autoconnect(dic)
 			self.dialog.show()
 		
@@ -166,6 +167,9 @@ class GtkVncViewer:
 
 	def helpMenuPop (self, data):
 		self.helpMenu.popup(None, None, None, 0, 0, gtk.get_current_event_time())
+
+	def keysMenuPop (self, data):
+		self.keysMenu.popup(None, None, None, 0, 0, gtk.get_current_event_time())
 	
 	def screenshot (self, data):
 		homeDir = os.environ.get('HOME', None)
@@ -181,16 +185,16 @@ class GtkVncViewer:
 		return False
 	
 	def send_cad (self, data):
-		print "send_cad"
-		self.vnc.send_keys(["Control_L", "Alt_L", "Del"])
+		self.vnc.send_keys(["Control_L", "Alt_L", "Delete"])
+		print _("Sent Ctrl+Alt+Delete")
 
 	def send_cab (self, data):
-		print "send_cab"
 		self.vnc.send_keys(["Control_L", "Alt_L", "BackSpace"])
+		print _("Sent Ctrl+Alt+BackSpace")
 
 	def send_ce (self, data):
-		print "send_ce"
 		self.vnc.send_keys(["Control_L", "Escape"])
+		print _("Sent Ctrl+Escape")
 
 	def delete_clicked (self, data):		
 		select = self.iconview.get_selected_items()
