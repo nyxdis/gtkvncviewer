@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.2 on Mon May 12 20:30:01 2008 -->
+<!--Generated with glade3 3.4.5 on Tue May 13 14:18:23 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="connectDialog">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -730,19 +730,53 @@ Public License instead of this License.
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="spacing">5</property>
             <child>
-              <widget class="GtkButton" id="disconnectButton">
+              <widget class="GtkButton" id="keysButton">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">gtk-disconnect</property>
+                <property name="relief">GTK_RELIEF_NONE</property>
+                <property name="response_id">0</property>
+                <child>
+                  <widget class="GtkHBox" id="hbox4">
+                    <property name="visible">True</property>
+                    <child>
+                      <widget class="GtkImage" id="image4">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-edit</property>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label7">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Send keys</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkToggleButton" id="fullscreenButton">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="label" translatable="yes">gtk-fullscreen</property>
                 <property name="relief">GTK_RELIEF_NONE</property>
                 <property name="use_stock">True</property>
                 <property name="response_id">0</property>
-                <signal name="clicked" handler="on_disconnectButton_clicked"/>
+                <signal name="toggled" handler="on_togglebutton1_toggled"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -786,22 +820,6 @@ Public License instead of this License.
               </widget>
               <packing>
                 <property name="expand">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkToggleButton" id="fullscreenButton">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="label" translatable="yes">gtk-fullscreen</property>
-                <property name="relief">GTK_RELIEF_NONE</property>
-                <property name="use_stock">True</property>
-                <property name="response_id">0</property>
-                <signal name="toggled" handler="on_togglebutton1_toggled"/>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -829,7 +847,8 @@ Public License instead of this License.
                     <child>
                       <widget class="GtkLabel" id="label6">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">Make icon on desktop</property>
+                        <property name="label" translatable="yes">_Make icon on desktop</property>
+                        <property name="use_underline">True</property>
                       </widget>
                       <packing>
                         <property name="position">1</property>
@@ -845,6 +864,23 @@ Public License instead of this License.
               </packing>
             </child>
             <child>
+              <widget class="GtkButton" id="disconnectButton">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label" translatable="yes">gtk-disconnect</property>
+                <property name="relief">GTK_RELIEF_NONE</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">0</property>
+                <signal name="clicked" handler="on_disconnectButton_clicked"/>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
               <widget class="GtkLabel" id="window_label">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -853,7 +889,7 @@ Public License instead of this License.
                 <property name="use_markup">True</property>
               </widget>
               <packing>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
           </widget>
@@ -925,5 +961,32 @@ Public License instead of this License.
   </widget>
   <widget class="GtkMenu" id="helpMenu">
     <property name="visible">True</property>
+  </widget>
+  <widget class="GtkMenu" id="keysMenu">
+    <property name="visible">True</property>
+    <child>
+      <widget class="GtkMenuItem" id="CtrlAltDelmenuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Ctrl+Alt+Del</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_CtrlAltDelmenuitem_activate"/>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkMenuItem" id="CtrlAltBackmenuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Ctrl+Alt+Backspace</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_CtrlAltBackmenuitem_activate"/>
+      </widget>
+    </child>
+    <child>
+      <widget class="GtkMenuItem" id="CtrlEscmenuitem">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Ctrl+Esc</property>
+        <property name="use_underline">True</property>
+        <signal name="activate" handler="on_CtrlEscmenuitem_activate"/>
+      </widget>
+    </child>
   </widget>
 </glade-interface>

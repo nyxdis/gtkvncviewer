@@ -3,7 +3,7 @@
 #http://launchpad.net/gtkvncviewer
 #(c) Clement Lorteau <northern_lights@users.sourceforge.net>
 
-version = "0.3"
+version = "0.3.1"
 
 import sys
 try:
@@ -67,6 +67,9 @@ class GtkVncViewer:
 		self.fullscreenButton = self.wTree.get_widget("fullscreenButton")
 		self.fullscreenButton.set_active(False)
 		self.iconview = self.wTree.get_widget("iconview1")
+		self.keysButton = self.wTree.get_widget("keysButton")
+		self.keysMenu = self.wTree.get_widget("keysMenu")
+		self.keysMenu.attach_to_widget(self.keysButton, None)
 		self.vnc=gtkvnc.Display()
 		self.model = gtk.ListStore (str,str,str,gtk.gdk.Pixbuf)
 		self.iconview.set_model(self.model)
@@ -100,7 +103,10 @@ class GtkVncViewer:
 				"on_togglebutton1_toggled" : self.fullscreen,
 				"on_toolbar_note_entered" : self.show_hide_toolbar,
 				"on_window_motion_notify_event" : self.mouse_moved_in_window,
-				"on_desktopIconButton_clicked" : self.icon_on_desktop}
+				"on_desktopIconButton_clicked" : self.icon_on_desktop,
+				"on_CtrlAltDelmenuitem_activate": self.send_cad,
+				"on_CtrlAltBackmenuitem_activate": self.send_cab,
+				"on_CtrlEscmenuitem_activate": self.send_ce}
 			self.wTree.signal_autoconnect(dic)
 			self.dialog.show()
 		
@@ -173,6 +179,18 @@ class GtkVncViewer:
 		dialog.run()
 		dialog.destroy()
 		return False
+	
+	def send_cad (self, data):
+		print "send_cad"
+		self.vnc.send_keys(["Control_L", "Alt_L", "Del"])
+
+	def send_cab (self, data):
+		print "send_cab"
+		self.vnc.send_keys(["Control_L", "Alt_L", "BackSpace"])
+
+	def send_ce (self, data):
+		print "send_ce"
+		self.vnc.send_keys(["Control_L", "Escape"])
 
 	def delete_clicked (self, data):		
 		select = self.iconview.get_selected_items()
