@@ -3,7 +3,7 @@
 #http://launchpad.net/gtkvncviewer
 #(c) Clement Lorteau <northern_lights@users.sourceforge.net>
 
-version = "0.3.1"
+version = "0.3.2"
 
 import sys
 try:
@@ -172,7 +172,7 @@ class GtkVncViewer:
 		self.keysMenu.popup(None, None, None, 0, 0, gtk.get_current_event_time())
 	
 	def screenshot (self, data):
-		homeDir = os.environ.get('HOME', None)
+		homeDir = os.environ.get('HOME', None) #=> can't work on Windows
 		pix = self.vnc.get_pixbuf()
         	pix.save(homeDir+"/vnc.png", "png", { "tEXt::Generator App": "gtkvncviewer" })
 		dialog = gtk.MessageDialog (self.window,
@@ -187,14 +187,17 @@ class GtkVncViewer:
 	def send_cad (self, data):
 		self.vnc.send_keys(["Control_L", "Alt_L", "Delete"])
 		print _("Sent Ctrl+Alt+Delete")
+		self.vnc.grab_focus()
 
 	def send_cab (self, data):
 		self.vnc.send_keys(["Control_L", "Alt_L", "BackSpace"])
 		print _("Sent Ctrl+Alt+BackSpace")
+		self.vnc.grab_focus()
 
 	def send_ce (self, data):
 		self.vnc.send_keys(["Control_L", "Escape"])
 		print _("Sent Ctrl+Escape")
+		self.vnc.grab_focus()
 
 	def delete_clicked (self, data):		
 		select = self.iconview.get_selected_items()
@@ -212,7 +215,7 @@ class GtkVncViewer:
 			gtk.MESSAGE_QUESTION,
 			gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
 			gtk.BUTTONS_YES_NO,
-			_("Are you sure you want remove")+" \""+server+"\" ?")
+			_("Are you sure you want remove the server \"%(server)s\"?") %{"server": server})
 		r = dialog.run()
 		dialog.destroy()
 		if (r == gtk.RESPONSE_NO):
@@ -271,7 +274,7 @@ class GtkVncViewer:
 		else:
 			password.set_text("")
 
-	#finds the server 'name', and return its credentials and its path
+	#finds the server 'name', and return its credentials and its iconview path
 	#if not found, return False
 	def find_server (self, name):
 		iter = self.model.get_iter_first()
@@ -300,7 +303,7 @@ class GtkVncViewer:
                 	keyring,
                 	gnomekeyring.ITEM_GENERIC_SECRET,
                 	"gtkvncviewer VNC server credentials ("+server+")",
-                	dict(appname="gtkvncviewer, vnc server credentials"),
+                	dict(appname="gtkvncviewer, credentials of vnc server \""+server+"\""),
 			"\n".join((username, password)), True)
            	gconf.client_get_default().set_int(GCONF_AUTH_KEY, auth_token)
 

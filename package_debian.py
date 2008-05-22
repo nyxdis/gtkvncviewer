@@ -541,8 +541,7 @@ if __name__ == "__main__":
 This script provides a GUI for connecting to VNC servers. It remembers the
 credentials of known servers, so connecting to a VNC server is just one
 double-click away. Servers are shown in an icon view."""
-    p.depends="${python:Depends}, python-glade2, python-gtk2, python-gnome2-desktop, 
-python-gtk-vnc, dbus-x11"
+    p.depends="${python:Depends}, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc, dbus-x11"
     p.license="gpl"
     p.section="utils"
     p.arch="all"
@@ -569,6 +568,6 @@ python-gtk-vnc, dbus-x11"
     print "Generating..."
 
     #debian
-    version="0.3"
+    version="0.3.1"
     p.generate(version, changelog, rpm=False, src=True, debrev="")
 

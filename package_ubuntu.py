@@ -540,14 +540,13 @@ if __name__ == "__main__":
 This script provides a GUI for connecting to VNC servers. It remembers the
 credentials of known servers, so connecting to a VNC server is just one
 double-click away. Servers are shown in an icon view."""
-    p.depends="${python:Depends}, python-gconf, python-glade2, python-gtk2, 
-python-gnome2-desktop, python-gtk-vnc, dbus-x11"
+    p.depends="${python:Depends}, python-gconf, python-glade2, python-gtk2, python-gnome2-desktop, python-gtk-vnc, dbus-x11"
     p.license="gpl"
     p.section="utils"
     p.arch="all"
     
     #files
-    usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
+    usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png","data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
     p["/usr/bin"] = ["gtkvncviewer",]
     p["/usr/share/applications"]=["data/gtkvncviewer.desktop",]
     p["_docs"]=["AUTHORS",]
@@ -568,6 +567,6 @@ python-gnome2-desktop, python-gtk-vnc, dbus-x11"
     print "Generating..."
 
     #debian
-    version="0.3"
-    p.generate(version, changelog, rpm=False, src=True, debrev="0ubuntu1~ppa1")
+    version="0.3.1"
+    p.generate(version, changelog, rpm=False, src=True, debrev="~ppa1")
 
