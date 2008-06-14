@@ -310,7 +310,7 @@ Maintainer: %(author)s <%(mail)s>
 Standards-Version: 3.7.3
 XS-Python-Version: current
 Build-Depends: debhelper (>= 5.0.38)
-Build-Depends-Indep: python-central (>= 0.5.6), dpatch
+Build-Depends-Indep: python-central (>= 0.5.6)
 Homepage: http://launchpad.net/gtkvncviewer
 
 Package: %(name)s
@@ -429,19 +429,7 @@ build-stamp:
 	dh_testdir
 	touch build-stamp
 
-patch: patch-stamp
-
-patch-stamp:
-	dpatch apply-all
-	dpatch cat-all >patch-stamp
-
-unpatch:
-	dpatch deapply-all
-	rm -rf patch-stamp debian/patched
-
-clean: clean-patched unpatch
-
-clean-patched:
+clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
@@ -454,9 +442,9 @@ install: build
 	dh_installdirs
 	dh_install
 
-binary-arch: patch build install
+binary-arch: build install
 
-binary-indep: patch build install
+binary-indep: build install
 	dh_testdir
 	dh_testroot
 	dh_pycentral
@@ -568,6 +556,6 @@ double-click away. Servers are shown in an icon view."""
     print "Generating..."
 
     #debian
-    version="0.3.1"
-    p.generate(version, changelog, rpm=False, src=True, debrev="")
+    version="0.3.2"
+    p.generate(version, changelog, rpm=False, src=True, debrev="1")
 

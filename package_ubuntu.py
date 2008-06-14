@@ -567,6 +567,6 @@ double-click away. Servers are shown in an icon view."""
     print "Generating..."
 
     #debian
-    version="0.3.1"
+    version="0.3.2"
     p.generate(version, changelog, rpm=False, src=True, debrev="~ppa1")
 

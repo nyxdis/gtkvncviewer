@@ -1,5 +1,5 @@
 20080522
-	* Give focus back to the vnc widget after sent keys (Fixes: #xxxxxx)
+	* Give focus back to the vnc widget after sent keys (Fixes: #232147)
 
 20080513
 	* Added send keys feature

@@ -1,5 +1,6 @@
-gtkvncviewer (0.3.1~ppa1) hardy; urgency=low
+gtkvncviewer (0.3.2~ppa1) hardy; urgency=low
 
   * New upstream release.
+    Adds the send keys functions that previous version was lacking.
 
- -- Clement Lorteau <northern_lights@users.sourceforge.net>  Mon, 13 May 2008 14:41:41 +0200
+ -- Clement Lorteau <northern_lights@users.sourceforge.net>  Sun, 25 May 2008 21:52:03 +0200

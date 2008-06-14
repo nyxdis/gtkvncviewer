@@ -1,5 +1,12 @@
-gtkvncviewer (0.3.1) unstable; urgency=low
+gtkvncviewer (0.3.2-1) unstable; urgency=low
 
-  * New upstream release.
+  * New upstream release. Closes: #482910.
+    Adds the send keys functions that previous version was lacking.
 
- -- Clement Lorteau <northern_lights@users.sourceforge.net>  Mon, 13 May 2008 14:41:41 +0200
+ -- Clement Lorteau <northern_lights@users.sourceforge.net>  Sun, 08 Jun 2008 15:36:51 +0200
+
+gtkvncviewer (0.2.3-1) unstable; urgency=low
+
+  * First Debian package. Closes: #480055.
+
+ -- Clement Lorteau <northern_lights@users.sourceforge.net>  Sat, 10 May 2008 10:33:37 +0200
