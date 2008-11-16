@@ -371,7 +371,13 @@ Categories=Network;
 		self.vnc.set_credential(gtkvnc.CREDENTIAL_PASSWORD, password)
 		self.vnc.set_credential(gtkvnc.CREDENTIAL_CLIENTNAME, "gtkvncviewer")
 		print _("Connecting to %s...") % server 
-		self.vnc.open_host(server, "5900")
+		serverport = server.split(':')
+		server = serverport[0]
+		try:
+			port = serverport[1]
+		except:
+			port = "5900"
+		self.vnc.open_host(server, port)
 		#vnc.connect("vnc-auth-credential", self.vnc_auth_cred)
 		self.vnc.connect("vnc-connected", self.vnc_connected, self)
 		self.vnc.connect("vnc-initialized", self.vnc_initialized, username, server, self)

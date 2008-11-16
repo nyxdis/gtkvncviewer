@@ -1,3 +1,6 @@
+20081116
+	* Added possibility to specify alternate port (Fixes: #264631)
+
 20080522
 	* Give focus back to the vnc widget after sent keys (Fixes: #232147)
 
