@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-15 23:53+0100\n"
-"PO-Revision-Date: 2008-02-29 17:08+0000\n"
-"Last-Translator: BoomerBoss <dev@breuer-pascal.de>\n"
+"PO-Revision-Date: 2008-07-24 21:14+0000\n"
+"Last-Translator: Maximilian Reininghaus <max.reininghaus@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-03-07 18:08+0000\n"
+"X-Launchpad-Export-Date: 2008-12-30 21:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: gtkvncviewer.py:86
@@ -27,11 +27,11 @@ msgstr "Screenshot gespeichert in"
 
 #: gtkvncviewer.py:110
 msgid "nothing to delete"
-msgstr ""
+msgstr "Nichts zu löschen"
 
 #: gtkvncviewer.py:123
 msgid "Are you sure you want remove"
-msgstr ""
+msgstr "Sind Sie sicher das sie löschen wollen"
 
 #: gtkvncviewer.py:127
 msgid "deletion canceled"
@@ -74,9 +74,8 @@ msgid "_Password:"
 msgstr "_Passwort:"
 
 #: gtkvncviewer.glade.h:4
-#, fuzzy
 msgid "_Screenshot"
-msgstr "Bild_schirmfoto"
+msgstr ""
 
 #: gtkvncviewer.glade.h:5
 msgid "_Server:"
@@ -104,7 +103,7 @@ msgstr "gtk-löschen"
 
 #: gtkvncviewer.glade.h:11
 msgid "gtk-disconnect"
-msgstr ""
+msgstr "gtk-trennen"
 
 #: gtkvncviewer.glade.h:12
 msgid "gtk-quit"
@@ -112,7 +111,7 @@ msgstr "gtk-beenden"
 
 #: gtkvncviewer.glade.h:13
 msgid "gtkvncviewer"
-msgstr ""
+msgstr "gtkvncviewer"
 
 #: gtkvncviewer.glade.h:14
 msgid "label"

@@ -1,3 +1,11 @@
+gtkvncviewer (0.4-1) unstable; urgency=low
+
+  * New upstream release. Closes: #xxxxx.
+    Adds alternate port feature that previous version was lacking along with new
+    translations.
+
+ -- Clement Lorteau <northern_lights@users.sourceforge.net>  Wed, 31 Dec 2008 08:50:01 +0100
+
 gtkvncviewer (0.3.2-1) unstable; urgency=low
 
   * New upstream release. Closes: #482910.

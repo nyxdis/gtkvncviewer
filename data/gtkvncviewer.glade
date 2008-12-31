@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.2 on Tue May 13 19:48:42 2008 -->
+<!--Generated with glade3 3.4.5 on Tue Dec 30 18:20:21 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="connectDialog">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -687,6 +687,19 @@ consider it more useful to permit linking proprietary applications with the
 library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.
 </property>
+    <property name="translator_credits" translatable="yes">Brazilian Portuguese: Allan Lopes
+Danish: Jeppe Toustrup
+Dutch: ubby
+English (United Kingdom): Nicholas Wastell
+French: Clément Lorteau
+German: Maximilian Reininghaus
+Hebrew: Yaron
+Italian: Matteo Ferrabone
+Lithuanian: zolookas
+Polish: Kamil Skrzypiński
+Russian: Sergei Zivukov
+Simplified Chinese: Tao Wei
+Spanish: AlexZelder</property>
     <property name="logo">gtkvncviewer_128.png</property>
     <signal name="delete_event" handler="on_aboutDialog_delete_event"/>
     <signal name="response" handler="on_aboutDialog_response"/>

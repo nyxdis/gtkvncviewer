@@ -1,16 +1,16 @@
-# Gtk VNC Viewer pot file.
-# Copyright (C) 2008 Clement Lorteau
+# Russian translation for gtkvncviewer
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the gtkvncviewer package.
-# Clement Lorteau <northern_lights@users.sourceforge.net>, 2008.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: gtkvncviewer\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-02-15 23:53+0100\n"
-"PO-Revision-Date: 2008-07-23 05:32+0000\n"
-"Last-Translator: AlexZelder <Unknown>\n"
-"Language-Team: Spanish <es@li.org>\n"
+"PO-Revision-Date: 2008-04-01 07:44+0000\n"
+"Last-Translator: Sergei Zivukov <Unknown>\n"
+"Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,95 +19,95 @@ msgstr ""
 
 #: gtkvncviewer.py:86
 msgid "gnome-keyring access denied"
-msgstr "Acceso denegado al deposito de claves gnome"
+msgstr "gnome-схеме отказано в доступе"
 
 #: gtkvncviewer.py:103
 msgid "Screenshot saved in"
-msgstr "Captura de pantalla guardada en"
+msgstr "Скриншот сохранен в"
 
 #: gtkvncviewer.py:110
 msgid "nothing to delete"
-msgstr "nada a eliminar"
+msgstr "нечего удалять"
 
 #: gtkvncviewer.py:123
 msgid "Are you sure you want remove"
-msgstr "Esta seguro que desea borrar"
+msgstr "Вы действительно хотите удалить"
 
 #: gtkvncviewer.py:127
 msgid "deletion canceled"
-msgstr "eliminación cancelada"
+msgstr "удаление отменено"
 
 #: gtkvncviewer.py:155
 msgid "gnome-keyring access denied, could not delete"
-msgstr "Acceso denegado al deposito de claves gnome, no sera borrado"
+msgstr "gnome-схеме отказано в доступе, не удалось удалить"
 
 #: gtkvncviewer.py:157
 msgid "gconf read error, could not delete"
-msgstr "error de lectura de gconf, no se puede eliminar"
+msgstr "ошибка чтения gconf, не удалось удалить"
 
 #: gtkvncviewer.py:240
 msgid "Connection initialized"
-msgstr "Conexión inicializada"
+msgstr "Инициализация соединения"
 
 #: gtkvncviewer.py:250
 msgid "Disconnected"
-msgstr "Desconectado"
+msgstr "Отключено"
 
 #: gtkvncviewer.py:255
 msgid "You have been disconnected"
-msgstr "Ha sido desconectado"
+msgstr "Вы были отключены"
 
 #: gtkvncviewer.py:261
 msgid "Connected"
-msgstr "Conectado"
+msgstr "Подключено"
 
 #: gtkvncviewer.glade.h:1
 msgid "<big><b>Connect to a remote desktop (VNC)</b></big>"
-msgstr "<big><b>Conectar al escritorio remoto (VNC)</b></big>"
+msgstr "<big><b>Подключиться к удаленному рабочему столу (VNC)</b></big>"
 
 #: gtkvncviewer.glade.h:2
 msgid "Small GTK tool to connect to VNC servers."
-msgstr "Pequeña herramienta GTK para conectar a servidores VNC."
+msgstr "Небольшой GTK инструмент для соединения с VNC серверами."
 
 #: gtkvncviewer.glade.h:3
 msgid "_Password:"
-msgstr "_Contraseña"
+msgstr "Пароль:"
 
 #: gtkvncviewer.glade.h:4
 msgid "_Screenshot"
-msgstr "_Captura de pantalla"
+msgstr "_Скриншот"
 
 #: gtkvncviewer.glade.h:5
 msgid "_Server:"
-msgstr "_Servidor:"
+msgstr "_Сервер:"
 
 #: gtkvncviewer.glade.h:6
 msgid "_User name:"
-msgstr "_Usuario:"
+msgstr "_Имя пользователя:"
 
 #: gtkvncviewer.glade.h:7
 msgid "gtk-about"
-msgstr "Acerca de gtk"
+msgstr "О gtk"
 
 #: gtkvncviewer.glade.h:8
 msgid "gtk-add"
-msgstr "Añadir"
+msgstr "gtk-добавить"
 
 #: gtkvncviewer.glade.h:9
 msgid "gtk-connect"
-msgstr "Conectar"
+msgstr "gtk-соединение"
 
 #: gtkvncviewer.glade.h:10
 msgid "gtk-delete"
-msgstr "Eliminar"
+msgstr "gtk-удалить"
 
 #: gtkvncviewer.glade.h:11
 msgid "gtk-disconnect"
-msgstr "Desconectar"
+msgstr "gtk-отсоединение"
 
 #: gtkvncviewer.glade.h:12
 msgid "gtk-quit"
-msgstr "Salir"
+msgstr "gtk-выход"
 
 #: gtkvncviewer.glade.h:13
 msgid "gtkvncviewer"
@@ -115,4 +115,4 @@ msgstr "gtkvncviewer"
 
 #: gtkvncviewer.glade.h:14
 msgid "label"
-msgstr "etiqueta"
+msgstr "ярлык"

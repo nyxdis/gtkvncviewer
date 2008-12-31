@@ -8,41 +8,42 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-15 23:53+0100\n"
-"PO-Revision-Date: 2008-03-01 13:27+0100\n"
+"PO-Revision-Date: 2008-07-21 17:51+0000\n"
+"Last-Translator: ubby <Unknown>\n"
+"Language-Team: Dutch\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: Clem <northern_lights@users.sourceforge.net>\n"
-"Language-Team: Dutch\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Launchpad-Export-Date: 2008-12-30 21:04+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: gtkvncviewer.py:86
 msgid "gnome-keyring access denied"
-msgstr ""
+msgstr "gnome-keyring toegang geweigerd"
 
 #: gtkvncviewer.py:103
 msgid "Screenshot saved in"
-msgstr ""
+msgstr "De Screenshot is opgeslagen in"
 
 #: gtkvncviewer.py:110
 msgid "nothing to delete"
-msgstr ""
+msgstr "niets om te verwijderen"
 
 #: gtkvncviewer.py:123
 msgid "Are you sure you want remove"
-msgstr ""
+msgstr "Weet u zeker dat u wilt verwijderen"
 
 #: gtkvncviewer.py:127
 msgid "deletion canceled"
-msgstr ""
+msgstr "het verwijderen is geannuleerd"
 
 #: gtkvncviewer.py:155
 msgid "gnome-keyring access denied, could not delete"
-msgstr ""
+msgstr "gnome-keyring toegang geweigerd, kan het niet verwijderen"
 
 #: gtkvncviewer.py:157
 msgid "gconf read error, could not delete"
-msgstr ""
+msgstr "gconf lees fout, kan het niet verwijderen"
 
 #: gtkvncviewer.py:240
 msgid "Connection initialized"
@@ -50,63 +51,64 @@ msgstr ""
 
 #: gtkvncviewer.py:250
 msgid "Disconnected"
-msgstr ""
+msgstr "Verbinding verbroken"
 
 #: gtkvncviewer.py:255
 msgid "You have been disconnected"
-msgstr ""
+msgstr "Uw verbinding is verbroken"
 
 #: gtkvncviewer.py:261
 msgid "Connected"
-msgstr ""
+msgstr "Verbonden"
 
 #: gtkvncviewer.glade.h:1
 msgid "<big><b>Connect to a remote desktop (VNC)</b></big>"
 msgstr ""
+"<big><b>Maak verbinding met een bureaublad op afstand (VNC)</b></big>"
 
 #: gtkvncviewer.glade.h:2
 msgid "Small GTK tool to connect to VNC servers."
-msgstr ""
+msgstr "Een kleine GTK tool om te verbinden met de VNC servers."
 
 #: gtkvncviewer.glade.h:3
 msgid "_Password:"
-msgstr ""
+msgstr "_Wachtwoord:"
 
 #: gtkvncviewer.glade.h:4
 msgid "_Screenshot"
-msgstr ""
+msgstr "_Screenshot"
 
 #: gtkvncviewer.glade.h:5
 msgid "_Server:"
-msgstr ""
+msgstr "_Server:"
 
 #: gtkvncviewer.glade.h:6
 msgid "_User name:"
-msgstr ""
+msgstr "_Gebruikersnaam:"
 
 #: gtkvncviewer.glade.h:7
 msgid "gtk-about"
-msgstr ""
+msgstr "over-gtk"
 
 #: gtkvncviewer.glade.h:8
 msgid "gtk-add"
-msgstr ""
+msgstr "gtk-toevoegen"
 
 #: gtkvncviewer.glade.h:9
 msgid "gtk-connect"
-msgstr ""
+msgstr "gtk-verbinden"
 
 #: gtkvncviewer.glade.h:10
 msgid "gtk-delete"
-msgstr ""
+msgstr "gtk-verwijder"
 
 #: gtkvncviewer.glade.h:11
 msgid "gtk-disconnect"
-msgstr ""
+msgstr "gtk-verbinding verbreken"
 
 #: gtkvncviewer.glade.h:12
 msgid "gtk-quit"
-msgstr ""
+msgstr "gtk-afsluiten"
 
 #: gtkvncviewer.glade.h:13
 msgid "gtkvncviewer"
@@ -114,4 +116,4 @@ msgstr ""
 
 #: gtkvncviewer.glade.h:14
 msgid "label"
-msgstr ""
+msgstr "label"

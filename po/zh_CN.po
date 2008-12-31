@@ -8,109 +8,111 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-15 23:53+0100\n"
-"PO-Revision-Date: 2008-03-01 13:27+0100\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ASCII\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: Clem <northern_lights@users.sourceforge.net>\n"
+"PO-Revision-Date: 2008-04-27 11:41+0000\n"
+"Last-Translator: Tao Wei <Unknown>\n"
 "Language-Team: Chinese (simplified)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2008-12-30 21:04+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
 
 #: gtkvncviewer.py:86
 msgid "gnome-keyring access denied"
-msgstr ""
+msgstr "gnome-keyring 拒绝访问"
 
 #: gtkvncviewer.py:103
 msgid "Screenshot saved in"
-msgstr ""
+msgstr "截图保存在"
 
 #: gtkvncviewer.py:110
 msgid "nothing to delete"
-msgstr ""
+msgstr "没有可删除的"
 
 #: gtkvncviewer.py:123
 msgid "Are you sure you want remove"
-msgstr ""
+msgstr "你确定要移除"
 
 #: gtkvncviewer.py:127
 msgid "deletion canceled"
-msgstr ""
+msgstr "取消删除"
 
 #: gtkvncviewer.py:155
 msgid "gnome-keyring access denied, could not delete"
-msgstr ""
+msgstr "gnome-keyring 拒绝访问，不能删除"
 
 #: gtkvncviewer.py:157
 msgid "gconf read error, could not delete"
-msgstr ""
+msgstr "gconf 读取错误，不能删除"
 
 #: gtkvncviewer.py:240
 msgid "Connection initialized"
-msgstr ""
+msgstr "连接初始化"
 
 #: gtkvncviewer.py:250
 msgid "Disconnected"
-msgstr ""
+msgstr "已断开"
 
 #: gtkvncviewer.py:255
 msgid "You have been disconnected"
-msgstr ""
+msgstr "你已经断开了连接"
 
 #: gtkvncviewer.py:261
 msgid "Connected"
-msgstr ""
+msgstr "已连接"
 
 #: gtkvncviewer.glade.h:1
 msgid "<big><b>Connect to a remote desktop (VNC)</b></big>"
-msgstr ""
+msgstr "<big><b>连接到一个远程桌面 (VNC)</b></big>"
 
 #: gtkvncviewer.glade.h:2
 msgid "Small GTK tool to connect to VNC servers."
-msgstr ""
+msgstr "GTK 小工具来连接到 VNC 服务器。"
 
 #: gtkvncviewer.glade.h:3
 msgid "_Password:"
-msgstr ""
+msgstr "密码(_P)："
 
 #: gtkvncviewer.glade.h:4
 msgid "_Screenshot"
-msgstr ""
+msgstr "截图(_S)"
 
 #: gtkvncviewer.glade.h:5
 msgid "_Server:"
-msgstr ""
+msgstr "服务器(_S)："
 
 #: gtkvncviewer.glade.h:6
 msgid "_User name:"
-msgstr ""
+msgstr "用户名(_U)："
 
 #: gtkvncviewer.glade.h:7
 msgid "gtk-about"
-msgstr ""
+msgstr "gtk-about"
 
 #: gtkvncviewer.glade.h:8
 msgid "gtk-add"
-msgstr ""
+msgstr "gtk-add"
 
 #: gtkvncviewer.glade.h:9
 msgid "gtk-connect"
-msgstr ""
+msgstr "gtk-connect"
 
 #: gtkvncviewer.glade.h:10
 msgid "gtk-delete"
-msgstr ""
+msgstr "gtk-delete"
 
 #: gtkvncviewer.glade.h:11
 msgid "gtk-disconnect"
-msgstr ""
+msgstr "gtk-disconnect"
 
 #: gtkvncviewer.glade.h:12
 msgid "gtk-quit"
-msgstr ""
+msgstr "gtk-quit"
 
 #: gtkvncviewer.glade.h:13
 msgid "gtkvncviewer"
-msgstr ""
+msgstr "gtkvncviewer"
 
 #: gtkvncviewer.glade.h:14
 msgid "label"
-msgstr ""
+msgstr "标签"
