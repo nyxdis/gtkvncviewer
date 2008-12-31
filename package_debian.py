@@ -191,6 +191,7 @@ FILES :
         author = self.author
         mail = self.mail
         files=self.__files
+	watchfile_url = self.watchfile_url
 
         if section not in Py2deb.SECTIONS:
             raise Py2debException("section '%s' is unknown (%s)" % (section,str(Py2deb.SECTIONS)))
@@ -270,6 +271,12 @@ FILES :
                     else:
                         raise Py2debException("unknown file '' "%file) # shouldn't be raised (because controlled before)
 
+	    #write debian/watch file
+            watch="""version=3
+%s
+""" % watchfile_url
+            open(os.path.join(DEBIAN,"watch"),"w").write(watch)
+
             #write package.install
             open(os.path.join(DEBIAN,name+".install"),"w").write("".join(rules))
 
@@ -307,7 +314,7 @@ FILES :
 Section: %(section)s
 Priority: optional
 Maintainer: %(author)s <%(mail)s>
-Standards-Version: 3.7.3
+Standards-Version: 3.8.0
 XS-Python-Version: current
 Build-Depends: debhelper (>= 5.0.38)
 Build-Depends-Indep: python-central (>= 0.5.6)
@@ -415,13 +422,6 @@ is licensed under the GPL, see above.
             #==========================================================================
             txt="""#!/usr/bin/make -f
 # -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-# This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
-.NOTPARALLEL:
-
 
 build: build-stamp
 
@@ -533,6 +533,7 @@ double-click away. Servers are shown in an icon view."""
     p.license="gpl"
     p.section="utils"
     p.arch="all"
+    p.watchfile_url="http://launchpad.net/gtkvncviewer/trunk/.*/+download/gtkvncviewer-(.*)\.tar\.gz"
     
     #files
     usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png", "data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]

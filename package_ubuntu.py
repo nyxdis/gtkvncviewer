@@ -191,6 +191,7 @@ FILES :
         author = self.author
         mail = self.mail
         files=self.__files
+	watchfile_url = self.watchfile_url
 
         if section not in Py2deb.SECTIONS:
             raise Py2debException("section '%s' is unknown (%s)" % (section,str(Py2deb.SECTIONS)))
@@ -268,6 +269,12 @@ FILES :
                     else:
                         raise Py2debException("unknown file '' "%file) # shouldn't be raised (because controlled before)
 
+	    #write debian/watch file
+            watch="""version=3
+%s
+""" % watchfile_url
+            open(os.path.join(DEBIAN,"watch"),"w").write(watch)
+
             #write package.install
             open(os.path.join(DEBIAN,name+".install"),"w").write("".join(rules))
 
@@ -304,12 +311,11 @@ FILES :
             txt="""Source: %(name)s
 Section: %(section)s
 Priority: optional
-Maintainer: Ubuntu MOTU Developers <ubuntu-motu@lists.ubuntu.com>
-XSBC-Original-Maintainer: %(author)s <%(mail)s> 
-Standards-Version: 3.7.3
+Maintainer: %(author)s <%(mail)s> 
+Standards-Version: 3.8.0
 XS-Python-Version: current
 Build-Depends: debhelper (>= 5.0.38)
-Build-Depends-Indep: python-central (>= 0.5.6), dpatch
+Build-Depends-Indep: python-central (>= 0.5.6)
 Homepage: http://launchpad.net/gtkvncviewer
 
 Package: %(name)s
@@ -414,13 +420,6 @@ is licensed under the GPL, see above.
             #==========================================================================
             txt="""#!/usr/bin/make -f
 # -*- makefile -*-
-# Sample debian/rules that uses debhelper.
-# This file was originally written by Joey Hess and Craig Small.
-# As a special exception, when this file is copied by dh-make into a
-# dh-make output file, you may use that output file without restriction.
-# This special exception was added by Craig Small in version 0.37 of dh-make.
-.NOTPARALLEL:
-
 
 build: build-stamp
 
@@ -428,19 +427,7 @@ build-stamp:
 	dh_testdir
 	touch build-stamp
 
-patch: patch-stamp
-
-patch-stamp:
-	dpatch apply-all
-	dpatch cat-all >patch-stamp
-
-unpatch:
-	dpatch deapply-all
-	rm -rf patch-stamp debian/patched
-
-clean: clean-patched unpatch
-
-clean-patched:
+clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
@@ -453,9 +440,9 @@ install: build
 	dh_installdirs
 	dh_install
 
-binary-arch: patch build install
+binary-arch: build install
 
-binary-indep: patch build install
+binary-indep: build install
 	dh_testdir
 	dh_testroot
 	dh_pycentral
@@ -544,6 +531,7 @@ double-click away. Servers are shown in an icon view."""
     p.license="gpl"
     p.section="utils"
     p.arch="all"
+    p.watchfile_url="http://launchpad.net/gtkvncviewer/trunk/.*/+download/gtkvncviewer-(.*)\.tar\.gz"
     
     #files
     usr_share_gtkvncviewer = ["gtkvncviewer.py", "data/gtkvncviewer.glade", "data/gtkvncviewer_14.png","data/gtkvncviewer_64.png", "data/gtkvncviewer_128.png", "data/gtkvncviewer_192.png",]
