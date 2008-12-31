@@ -1,4 +1,4 @@
-gtkvncviewer (0.4) unstable; urgency=low
+gtkvncviewer (0.4-0ubuntu1~ppa1) intrepid; urgency=low
 
   * New upstream release.
     Adds the send keys functions that previous version was lacking.
