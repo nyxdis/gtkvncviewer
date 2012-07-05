@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-version = "0.5"
+version = "0.5.0"
 
 import sys
 try:
@@ -64,10 +64,10 @@ def wait():
 class GtkVncViewer:
 
 	def __init__(self):
-                self.parse_options()	
+                self.parse_options()
 		#build GUI
-		self.gladefile = "data/gtkvncviewer.glade"  
-	        self.wTree = gtk.glade.XML(self.gladefile) 
+		self.gladefile = "data/gtkvncviewer.glade"
+	        self.wTree = gtk.glade.XML(self.gladefile)
 		self.dialog = self.wTree.get_widget("connectDialog")
 		self.about = self.wTree.get_widget("aboutDialog")
 		self.about.set_version(version)
@@ -96,7 +96,7 @@ class GtkVncViewer:
 			LaunchpadIntegration.add_items(self.helpMenu,0,False,False)
 		else:
 			self.helpButton.set_sensitive(False)
-		
+
 		if (self.dialog):
 			self.window.connect("destroy", gtk.main_quit)
 			#Create our dictionay and connect it
@@ -123,7 +123,7 @@ class GtkVncViewer:
 				"on_keysButton_clicked" : self.keysMenuPop}
 			self.wTree.signal_autoconnect(dic)
 			self.dialog.show()
-		
+
 		#read stored credentials
 		GCONF_AUTH_KEY = "/apps/gtkvncviewer"
 		keyring = gnomekeyring.get_default_keyring_sync()
@@ -166,7 +166,7 @@ class GtkVncViewer:
 				user_textbox = self.wTree.get_widget("usernameEntry")
 				server_textbox.set_text(self.startup_options.server)
 				user_textbox.grab_focus()
-	
+
 	def fullscreen (self, data):
 		if (self.fullscreenButton.get_active()):
 			self.window.fullscreen()
@@ -183,7 +183,7 @@ class GtkVncViewer:
 
 	def keysMenuPop (self, data):
 		self.keysMenu.popup(None, None, None, 0, 0, gtk.get_current_event_time())
-	
+
 	def screenshot (self, data):
 		homeDir = os.environ.get('HOME', None) #=> can't work on Windows
 		pix = self.vnc.get_pixbuf()
@@ -196,7 +196,7 @@ class GtkVncViewer:
 		dialog.run()
 		dialog.destroy()
 		return False
-	
+
 	def send_cad (self, data):
 		self.vnc.send_keys(["Control_L", "Alt_L", "Delete"])
 		print _("Sent Ctrl+Alt+Delete")
@@ -212,7 +212,7 @@ class GtkVncViewer:
 		print _("Sent Ctrl+Escape")
 		self.vnc.grab_focus()
 
-	def delete_clicked (self, data):		
+	def delete_clicked (self, data):
 		select = self.iconview.get_selected_items()
 		if len(select) == 0:
 			print _("nothing to delete")
@@ -222,7 +222,7 @@ class GtkVncViewer:
 		iter = self.model.get_iter(i)
 		s = self.model.get(iter,0,1,2)
 		server = s[0]
-		
+
 		#ask confirmation
 		dialog = gtk.MessageDialog (self.window,
 			gtk.MESSAGE_QUESTION,
@@ -234,7 +234,7 @@ class GtkVncViewer:
 		if (r == gtk.RESPONSE_NO):
 			print _("deletion canceled")
 		else:
-			GCONF_AUTH_KEY = "/apps/gtkvncviewer"	
+			GCONF_AUTH_KEY = "/apps/gtkvncviewer"
 			gconfclient = gconf.client_get_default()
 			gconfclient.add_dir (GCONF_AUTH_KEY,
 				gconf.CLIENT_PRELOAD_RECURSIVE)
@@ -298,7 +298,7 @@ class GtkVncViewer:
 				return row
 			iter = self.model.iter_next(iter)
                 return False
-	
+
 	def add_server (self, data):
 		#add it to the iconview
 		pixbuf = self.iconview.render_icon(gtk.STOCK_NETWORK, gtk.ICON_SIZE_BUTTON)
@@ -329,7 +329,7 @@ class GtkVncViewer:
 	def close_window(self, widget, data):
 		quit()
 		return False
-	
+
 	def disconnect(self, data):
 		quit()
 
@@ -362,7 +362,6 @@ Categories=Network;
 """ % ("VNC: "+server, comment, server)
 		open(os.path.join(os.environ['HOME']+"/Desktop",
 				  server+".desktop"),"w").write(text)
-			
 
 	def handle_about_dialog_answer(self, widget, data):
 		if(data==-6):
@@ -383,7 +382,7 @@ Categories=Network;
 		self.vnc.set_credential(gtkvnc.CREDENTIAL_USERNAME, username)
 		self.vnc.set_credential(gtkvnc.CREDENTIAL_PASSWORD, password)
 		self.vnc.set_credential(gtkvnc.CREDENTIAL_CLIENTNAME, "gtkvncviewer")
-		print _("Connecting to %s...") % server 
+		print _("Connecting to %s...") % server
 		serverport = server.split(':')
 		server = serverport[0]
 		try:
@@ -407,7 +406,7 @@ Categories=Network;
 		self.window_toolbar_note.hide_all()
 		self.window.resize (vnc.get_width(), vnc.get_height())
 		vnc.grab_focus()
-		
+
 	def vnc_disconnected(src, vnc, window, self):
 		print _("Disconnected")
 		dialog = gtk.MessageDialog (window,
