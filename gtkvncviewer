@@ -36,11 +36,6 @@ try:
 	import gobject
 except:
 	sys.exit(1)
-try:
-	import LaunchpadIntegration
-	launchpad = True
-except:
-	launchpad = False
 
 import os
 
@@ -48,16 +43,14 @@ import os
 import locale
 import gettext
 APP = 'gtkvncviewer'
-DIR = 'locale'
+DIR = '/usr/share/locale'
 locale.setlocale(locale.LC_ALL, '')
-gettext.bindtextdomain(APP, DIR)
-gettext.textdomain(APP)
-gtk.glade.bindtextdomain(APP, DIR)
-gtk.glade.textdomain(APP)
+for module in (gettext, gtk.glade):
+    module.bindtextdomain(APP, DIR)
+    module.textdomain(APP)
 gettext.install(APP, DIR, unicode=1)
 #lang = gettext.translation(APP, DIR, languages=['ar'])
 #lang.install()
-_ = gettext.gettext
 
 def wait():
    while gtk.events_pending():
@@ -68,7 +61,7 @@ class GtkVncViewer:
 	def __init__(self):
                 self.parse_options()
 		#build GUI
-		self.gladefile = "data/gtkvncviewer.glade"
+		self.gladefile = "/usr/share/gtkvncviewer/gtkvncviewer.glade"
 	        self.wTree = gtk.glade.XML(self.gladefile)
 		self.dialog = self.wTree.get_widget("connectDialog")
 		self.about = self.wTree.get_widget("aboutDialog")
@@ -90,14 +83,6 @@ class GtkVncViewer:
 		self.iconview.set_model(self.model)
 		self.iconview.set_text_column(0)
 		self.iconview.set_pixbuf_column(3)
-		self.helpMenu = self.wTree.get_widget("helpMenu")
-		self.helpButton = self.wTree.get_widget("helpButton")
-		self.helpMenu.attach_to_widget(self.helpButton, None)
-		if (launchpad):
-			LaunchpadIntegration.set_sourcepackagename("gtkvncviewer")
-			LaunchpadIntegration.add_items(self.helpMenu,0,False,False)
-		else:
-			self.helpButton.set_sensitive(False)
 
 		if (self.dialog):
 			self.window.connect("destroy", gtk.main_quit)
@@ -114,7 +99,6 @@ class GtkVncViewer:
 				"on_iconview1_item_activated" : self.activated,
 				"on_delButton_clicked" : self.delete_clicked,
 				"on_screenshotButton_clicked" : self.screenshot,
-				"on_helpButton_clicked" : self.helpMenuPop,
 				"on_togglebutton1_toggled" : self.fullscreen,
 				"on_toolbar_note_entered" : self.show_hide_toolbar,
 				"on_window_motion_notify_event" : self.mouse_moved_in_window,

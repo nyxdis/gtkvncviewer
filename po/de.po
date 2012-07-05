@@ -67,7 +67,7 @@ msgstr "<big><b>Zu einem entfernten Desktop verbinden (VNC)</b></big>"
 
 #: gtkvncviewer.glade.h:2
 msgid "Small GTK tool to connect to VNC servers."
-msgstr "Kleines GTK-Hiflsmittel zum Verbinden mit VNC-Servern."
+msgstr "Kleines GTK-Hilfsmittel zum Verbinden mit VNC-Servern."
 
 #: gtkvncviewer.glade.h:3
 msgid "_Password:"

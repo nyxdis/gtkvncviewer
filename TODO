@@ -3,3 +3,4 @@
 - read pixmaps/locales from proper dir
 - optional avahi support?
 - store credentials in gnome-keyring(?) instead of gconf
+- german translation
