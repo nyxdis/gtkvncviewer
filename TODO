@@ -1,0 +1,4 @@
+- port to gtk3
+- install as module, install python-based wrapper to $BINDIR
+- optional avahi support?
+- store credentials in gnome-keyring(?) instead of gconf
