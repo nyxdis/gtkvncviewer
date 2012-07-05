@@ -2,7 +2,7 @@
 Name=Gtk VNC Viewer
 Comment=Connect to your VNC servers
 Exec=gtkvncviewer
-Icon=/usr/share/gtkvncviewer/data/gtkvncviewer_64.png
+Icon=gtkvncviewer_192
 StartupNotify=true
 Terminal=false
 Type=Application

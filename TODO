@@ -1,4 +1,5 @@
 - port to gtk3
-- install as module, install python-based wrapper to $BINDIR
+- port to py3
+- read pixmaps/locales from proper dir
 - optional avahi support?
 - store credentials in gnome-keyring(?) instead of gconf

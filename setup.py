@@ -1,9 +1,21 @@
 #!/usr/bin/env python
 
-import glob
+import glob, os
 from distutils.core import setup
 
-# TODO: locales
+# generate .mo files
+if not os.path.exists('locale'):
+    os.mkdir('locale')
+
+for po in glob.glob('po/*.po'):
+    lang = po[3:-3]
+    if not os.path.exists('locale/' + lang):
+        os.mkdir('locale/' + lang)
+    mo = 'locale/' + lang + '/gtkvncviewer.mo'
+    print "Generating", mo
+    os.system('msgfmt %s -o %s' % (po, mo))
+
+# TODO: autogenerate locales file list
 setup(name='gtkvncviewer',
         version='0.5.0',
         description='Simple Gtk+ tool to connect to VNC server',
@@ -12,8 +24,10 @@ setup(name='gtkvncviewer',
         url='http://cmende.github.com/gtkvncviewer',
         scripts=['gtkvncviewer'],
         license='GPL-2',
-        data_files=[('share/gtkvncviewer', ['gtkvncviewer.py']),
-            ('share/gtkvncviewer/data', glob.glob('data/*')),
+        data_files=[('share/gtkvncviewer', glob.glob('gtkvncviewer.glade')),
+            ('share/pixmaps', glob.glob('pixmaps/*')),
             ('share/applications', ['gtkvncviewer.desktop']),
-            ('share/man/man1', ['gtkvncviewer.1'])]
+            ('share/man/man1', ['gtkvncviewer.1']),
+            ('share/locale/de/LC_MESSAGES', ['locale/de/gtkvncviewer.mo']),
+            ]
         )
