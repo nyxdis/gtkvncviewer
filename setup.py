@@ -12,7 +12,7 @@ for po in glob.glob('po/*.po'):
     if not os.path.exists('locale/' + lang):
         os.mkdir('locale/' + lang)
     mo = 'locale/' + lang + '/gtkvncviewer.mo'
-    print "Generating", mo
+    print("Generating", mo)
     os.system('msgfmt %s -o %s' % (po, mo))
 
 # TODO: autogenerate locales file list
