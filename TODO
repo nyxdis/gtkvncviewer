@@ -1,6 +1,7 @@
+- port libglade to GtkBuilder
 - port to gtk3
 - port to py3
-- read pixmaps/locales from proper dir
+- build locale/pixmaps dir dynamically
 - optional avahi support?
-- store credentials in gnome-keyring(?) instead of gconf
+- alternative to gconf?
 - german translation
