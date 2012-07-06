@@ -1,7 +1,6 @@
-- port libglade to GtkBuilder
 - port to gtk3
 - port to py3
-- build locale/pixmaps dir dynamically
+- build pixmaps dir dynamically
 - optional avahi support?
 - alternative to gconf?
 - german translation
