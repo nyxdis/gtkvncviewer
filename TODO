@@ -5,6 +5,5 @@
 - german translation
 - in screenshot()
   - use glib functions instead of $HOME
-  - improve "Screenshot saved in" string for localization
 - avoid duplicate server entries
 - gconf via GIR

@@ -162,7 +162,7 @@ class GtkVncViewer:
                 Gtk.MessageType.INFO,
                 Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
                 Gtk.ButtonsType.OK,
-                _("Screenshot saved in")+" "+homeDir+"/vnc.png")
+                _("Screenshot saved in %s" % (homeDir+"/vnc.png")))
         dialog.run()
         dialog.destroy()
         return False
@@ -198,7 +198,7 @@ class GtkVncViewer:
                 Gtk.MessageType.QUESTION,
                 Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
                 Gtk.ButtonsType.YES_NO,
-                _("Are you sure you want remove the server \"%(server)s\"?") %{"server": server})
+                _("Are you sure you want remove the server \"%s\"?") % server)
         r = dialog.run()
         dialog.destroy()
         if (r == Gtk.ResponseType.NO):
