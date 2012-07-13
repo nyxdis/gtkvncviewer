@@ -1,6 +1,12 @@
-- port to gtk3
 - port to py3
 - build pixmaps dir dynamically
 - optional avahi support?
-- alternative to gconf?
+- gconf -> gsettings?
 - german translation
+- in screenshot()
+  - use glib functions instead of $HOME
+  - improve "Screenshot saved in" string for localization
+- fix indentation
+- avoid duplicate server entries
+- gnome-keyring via GIR
+- gconf via GIR
