@@ -21,23 +21,11 @@
 
 version = "0.5.0"
 
-import sys
-try:
-        import pygtk
-        pygtk.require("2.0")
-except:
-        pass
-try:
-        import gtk
-        import gtkvnc
-        import gconf
-        import gnomekeyring
-        from optparse import OptionParser
-        import gobject
-except:
-        sys.exit(1)
+import sys, os
+from optparse import OptionParser
+from gi.repository import Gtk, GtkVnc, GObject, GdkPixbuf
+import gnomekeyring, gconf
 
-import os
 
 #internat'
 import locale
@@ -51,17 +39,16 @@ gettext.install(APP, DIR, unicode=1)
 #locale.bindtextdomain(APP, DIR)
 
 def wait():
-   while gtk.events_pending():
-         gtk.main_iteration()
+    while Gtk.events_pending():
+        Gtk.main_iteration()
 
 class GtkVncViewer:
 
         def __init__(self):
                 self.parse_options()
                 # build GUI
-                self.uifile = os.path.join(sys.prefix, 'share', 'gtkvncviewer',
-                        'gtkvncviewer.ui')
-                self.wTree = gtk.Builder()
+                self.uifile = os.path.join(sys.prefix, 'share', 'gtkvncviewer', 'gtkvncviewer.ui')
+                self.wTree = Gtk.Builder()
                 self.wTree.set_translation_domain(APP)
                 self.wTree.add_from_file(self.uifile)
                 self.dialog = self.wTree.get_object("connectDialog")
@@ -72,44 +59,44 @@ class GtkVncViewer:
                 self.window_toolbar_note = self.wTree.get_object("toolbar_note")
                 self.window_toolbar = self.wTree.get_object("toolbar")
                 self.layout = self.wTree.get_object("viewport1")
-                self.scrolledwindow = self.wTree.get_object("scrolledwindow1")
                 self.fullscreenButton = self.wTree.get_object("fullscreenButton")
                 self.fullscreenButton.set_active(False)
                 self.iconview = self.wTree.get_object("iconview1")
                 self.keysButton = self.wTree.get_object("keysButton")
                 self.keysMenu = self.wTree.get_object("keysMenu")
                 self.keysMenu.attach_to_widget(self.keysButton, None)
-                self.vnc=gtkvnc.Display()
-                self.model = gtk.ListStore (str,str,str,gtk.gdk.Pixbuf)
+                self.vnc = GtkVnc.Display()
+                self.model = Gtk.ListStore(str, str, str, GdkPixbuf.Pixbuf)
                 self.iconview.set_model(self.model)
                 self.iconview.set_text_column(0)
                 self.iconview.set_pixbuf_column(3)
 
                 if (self.dialog):
-                        self.window.connect("destroy", gtk.main_quit)
                         #Create our dictionay and connect it
-                        dic = { "on_quitButton_clicked" : gtk.main_quit,
-                                "on_aboutButton_clicked" : self.show_about_dialog,
-                                "on_aboutDialog_response" : self.handle_about_dialog_answer,
-                                "on_aboutDialog_delete_event" : self.hide_about_dialog,
-                                "on_connectButton_clicked" : self.vncconnect,
-                                "on_window_delete_event" : self.close_window,
-                                "on_disconnectButton_clicked" : self.disconnect,
-                                "on_addButton_clicked" : self.add_server,
-                                "on_iconview1_selection_changed" : self.selected,
-                                "on_iconview1_item_activated" : self.activated,
-                                "on_delButton_clicked" : self.delete_clicked,
-                                "on_screenshotButton_clicked" : self.screenshot,
-                                "on_togglebutton1_toggled" : self.fullscreen,
-                                "on_toolbar_note_entered" : self.show_hide_toolbar,
-                                "on_window_motion_notify_event" : self.mouse_moved_in_window,
-                                "on_desktopIconButton_clicked" : self.icon_on_desktop,
-                                "on_CtrlAltDelmenuitem_activate": self.send_cad,
+                        dic = {
                                 "on_CtrlAltBackmenuitem_activate": self.send_cab,
+                                "on_CtrlAltDelmenuitem_activate": self.send_cad,
                                 "on_CtrlEscmenuitem_activate": self.send_ce,
-                                "on_keysButton_clicked" : self.keysMenuPop}
+                                "on_aboutButton_clicked": self.show_about_dialog,
+                                "on_aboutDialog_delete_event": self.hide_about_dialog,
+                                "on_aboutDialog_response": self.handle_about_dialog_answer,
+                                "on_addButton_clicked": self.add_server,
+                                "on_connectButton_clicked": self.vncconnect,
+                                "on_connectDialog_destroy": Gtk.main_quit,
+                                "on_delButton_clicked": self.delete_clicked,
+                                "on_desktopIconButton_clicked": self.icon_on_desktop,
+                                "on_disconnectButton_clicked": self.disconnect,
+                                "on_iconview1_item_activated": self.activated,
+                                "on_iconview1_selection_changed": self.selected,
+                                "on_keysButton_clicked": self.keysMenuPop,
+                                "on_quitButton_clicked": Gtk.main_quit,
+                                "on_screenshotButton_clicked": self.screenshot,
+                                "on_togglebutton1_toggled": self.fullscreen,
+                                "on_toolbar_note_entered": self.show_hide_toolbar,
+                                "on_window_delete_event": self.close_window,
+                                "on_window_motion_notify_event": self.mouse_moved_in_window,
+                                }
                         self.wTree.connect_signals(dic)
-                        self.dialog.show()
 
                 #read stored credentials
                 GCONF_AUTH_KEY = "/apps/gtkvncviewer"
@@ -137,7 +124,7 @@ class GtkVncViewer:
                         else:
                                 username = None
                                 password = None
-                        pixbuf = self.iconview.render_icon(gtk.STOCK_NETWORK, gtk.ICON_SIZE_BUTTON)
+                        pixbuf = self.iconview.render_icon(Gtk.STOCK_NETWORK, Gtk.IconSize.BUTTON)
                         self.model.append([server, username, password, pixbuf])
 
                 #if a server was specified at startup, connect to it
@@ -166,16 +153,16 @@ class GtkVncViewer:
                 return False
 
         def keysMenuPop (self, data):
-                self.keysMenu.popup(None, None, None, 0, 0, gtk.get_current_event_time())
+                self.keysMenu.popup(None, None, None, 0, 0, Gtk.get_current_event_time())
 
         def screenshot (self, data):
                 homeDir = os.environ.get('HOME', None) #=> can't work on Windows
                 pix = self.vnc.get_pixbuf()
                 pix.save(homeDir+"/vnc.png", "png", { "tEXt::Generator App": "gtkvncviewer" })
-                dialog = gtk.MessageDialog (self.window,
-                        gtk.MESSAGE_INFO,
-                        gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                        gtk.BUTTONS_OK,
+                dialog = Gtk.MessageDialog (self.window,
+                        Gtk.MessageType.INFO,
+                        Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                        Gtk.ButtonsType.OK,
                         _("Screenshot saved in")+" "+homeDir+"/vnc.png")
                 dialog.run()
                 dialog.destroy()
@@ -202,20 +189,20 @@ class GtkVncViewer:
                         print _("nothing to delete")
                         return
 
-                i = select[0][0]
+                i = select[0]
                 iter = self.model.get_iter(i)
-                s = self.model.get(iter,0,1,2)
+                s = self.model.get(iter, 0, 1, 2)
                 server = s[0]
 
                 #ask confirmation
-                dialog = gtk.MessageDialog (self.window,
-                        gtk.MESSAGE_QUESTION,
-                        gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                        gtk.BUTTONS_YES_NO,
+                dialog = Gtk.MessageDialog (self.window,
+                        Gtk.MessageType.QUESTION,
+                        Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                        Gtk.ButtonsType.YES_NO,
                         _("Are you sure you want remove the server \"%(server)s\"?") %{"server": server})
                 r = dialog.run()
                 dialog.destroy()
-                if (r == gtk.RESPONSE_NO):
+                if (r == Gtk.ResponseType.NO):
                         print _("deletion canceled")
                 else:
                         GCONF_AUTH_KEY = "/apps/gtkvncviewer"
@@ -238,7 +225,7 @@ class GtkVncViewer:
                                         select = self.iconview.get_selected_items()
                                         if len(select) == 0:
                                                 return
-                                        i = select[0][0]
+                                        i = select[0]
                                         iter = self.model.get_iter(i)
                                         self.model.remove(iter)
                                         print server+" deleted"
@@ -252,20 +239,25 @@ class GtkVncViewer:
                 self.vncconnect(self.window)
 
         def selected (self, data):
-                username = self.wTree.get_object("usernameEntry")
-                password = self.wTree.get_object("pwdEntry")
-                server = self.wTree.get_object("serverEntry")
                 select = self.iconview.get_selected_items()
                 if len(select) == 0:
                         return
-                i = select[0][0]
+
+                username = self.wTree.get_object("usernameEntry")
+                password = self.wTree.get_object("pwdEntry")
+                server = self.wTree.get_object("serverEntry")
+
+                i = select[0]
                 iter = self.model.get_iter(i)
-                s = self.model.get(iter,0,1,2)
+                s = self.model.get(iter, 0, 1, 2)
+
                 server.set_text(s[0])
+
                 if (s[1] != None):
                         username.set_text(s[1])
                 else:
                         username.set_text("")
+
                 if (s[2] != None):
                         password.set_text(s[2])
                 else:
@@ -285,7 +277,7 @@ class GtkVncViewer:
 
         def add_server (self, data):
                 #add it to the iconview
-                pixbuf = self.iconview.render_icon(gtk.STOCK_NETWORK, gtk.ICON_SIZE_BUTTON)
+                pixbuf = self.iconview.render_icon(Gtk.STOCK_NETWORK, Gtk.IconSize.BUTTON)
                 username = self.wTree.get_object("usernameEntry").get_text()
                 password = self.wTree.get_object("pwdEntry").get_text()
                 server = self.wTree.get_object("serverEntry").get_text()
@@ -328,7 +320,7 @@ class GtkVncViewer:
                 if y <= 5 and self.fullscreenButton.get_active():
                         self.window_toolbar.show_all()
                         #setup timer that will hide toolbar when ended
-                        gobject.timeout_add(2000, self.window_toolbar.hide_all) #2 sec.
+                        GObject.timeout_add(2000, self.window_toolbar.hide_all) #2 sec.
 
         def icon_on_desktop(self, data):
                 server = self.current_server
@@ -359,7 +351,7 @@ Categories=Network;
                 return True
 
         def vncconnect(self, window):
-                self.dialog.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.WATCH))
+                self.dialog.window.set_cursor(Gdk.Cursor.new(Gdk.WATCH))
                 username = self.wTree.get_object("usernameEntry").get_text()
                 password = self.wTree.get_object("pwdEntry").get_text()
                 server = self.wTree.get_object("serverEntry").get_text()
@@ -393,16 +385,16 @@ Categories=Network;
 
         def vnc_disconnected(src, vnc, window, self):
                 print _("Disconnected")
-                dialog = gtk.MessageDialog (window,
-                        gtk.MESSAGE_INFO,
-                        gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                        gtk.BUTTONS_OK,
+                dialog = Gtk.MessageDialog (window,
+                        Gtk.MessageType.INFO,
+                        Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                        Gtk.ButtonsType.OK,
                         _("You have been disconnected"))
                 dialog.run()
                 dialog.destroy()
                 self.vnc.destroy()
-                self.vnc=gtkvnc.Display()
-                window.window.set_cursor(gtk.gdk.Cursor(gtk.gdk.ARROW))
+                self.vnc = GtkVnc.Display()
+                window.window.set_cursor(Gdk.Cursor.new(Gdk.ARROW))
 
         def vnc_connected(src, data, self):
                 print _("Connected")
@@ -420,4 +412,4 @@ Categories=Network;
 
 if __name__ == "__main__":
         instance = GtkVncViewer()
-        gtk.main()
+        Gtk.main()

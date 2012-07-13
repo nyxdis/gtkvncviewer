@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
+  <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-local-resource-path pixmaps -->
   <object class="GtkAboutDialog" id="aboutDialog">
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -315,13 +315,13 @@ Spanish: AlexZelder</property>
     <signal name="delete-event" handler="on_aboutDialog_delete_event" swapped="no"/>
     <signal name="response" handler="on_aboutDialog_response" swapped="no"/>
     <child internal-child="vbox">
-      <object class="GtkVBox" id="dialog-vbox1">
+      <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <property name="spacing">2</property>
         <child internal-child="action_area">
-          <object class="GtkHButtonBox" id="dialog-action_area1">
+          <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -344,11 +344,15 @@ Spanish: AlexZelder</property>
     </child>
   </object>
   <object class="GtkWindow" id="connectDialog">
+    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="title" translatable="yes">gtkvncviewer</property>
+    <property name="resizable">False</property>
     <property name="icon">/usr/share/pixmaps/gtkvncviewer_64.png</property>
     <property name="type_hint">dialog</property>
+    <property name="has_resize_grip">False</property>
+    <signal name="destroy" handler="on_connectDialog_destroy" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -476,8 +480,6 @@ Spanish: AlexZelder</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
-                    <property name="primary_icon_sensitive">True</property>
-                    <property name="secondary_icon_sensitive">True</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -493,8 +495,6 @@ Spanish: AlexZelder</property>
                     <property name="width_chars">10</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
-                    <property name="primary_icon_sensitive">True</property>
-                    <property name="secondary_icon_sensitive">True</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -511,8 +511,6 @@ Spanish: AlexZelder</property>
                     <property name="width_chars">10</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
-                    <property name="primary_icon_sensitive">True</property>
-                    <property name="secondary_icon_sensitive">True</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -564,6 +562,7 @@ Spanish: AlexZelder</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="use_stock">True</property>
                             <signal name="clicked" handler="on_addButton_clicked" swapped="no"/>
@@ -582,6 +581,7 @@ Spanish: AlexZelder</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="relief">none</property>
                             <property name="use_stock">True</property>
                             <signal name="clicked" handler="on_delButton_clicked" swapped="no"/>
@@ -607,12 +607,13 @@ Spanish: AlexZelder</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="use_action_appearance">False</property>
                         <property name="use_stock">True</property>
                         <accelerator key="Return" signal="clicked"/>
                         <signal name="clicked" handler="on_connectButton_clicked" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
+                        <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
@@ -629,8 +630,9 @@ Spanish: AlexZelder</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="hscrollbar_policy">automatic</property>
-                    <property name="vscrollbar_policy">automatic</property>
+                    <property name="hscrollbar_policy">never</property>
+                    <property name="shadow_type">in</property>
+                    <property name="min_content_height">75</property>
                     <child>
                       <object class="GtkViewport" id="viewport2">
                         <property name="visible">True</property>
@@ -642,8 +644,9 @@ Spanish: AlexZelder</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="orientation">horizontal</property>
-                            <property name="item_width">120</property>
+                            <property name="item_orientation">horizontal</property>
+                            <property name="columns">3</property>
+                            <property name="item_width">100</property>
                             <signal name="selection-changed" handler="on_iconview1_selection_changed" swapped="no"/>
                             <signal name="item-activated" handler="on_iconview1_item_activated" swapped="no"/>
                           </object>
@@ -652,7 +655,7 @@ Spanish: AlexZelder</property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
@@ -665,12 +668,9 @@ Spanish: AlexZelder</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <object class="GtkHSeparator" id="hseparator1">
@@ -692,9 +692,6 @@ Spanish: AlexZelder</property>
             <property name="spacing">12</property>
             <property name="layout_style">spread</property>
             <child>
-              <placeholder/>
-            </child>
-            <child>
               <object class="GtkButton" id="quitButton">
                 <property name="label">gtk-quit</property>
                 <property name="use_action_appearance">False</property>
@@ -702,6 +699,7 @@ Spanish: AlexZelder</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_quitButton_clicked" swapped="no"/>
               </object>
@@ -720,6 +718,7 @@ Spanish: AlexZelder</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_aboutButton_clicked" swapped="no"/>
               </object>
@@ -738,21 +737,6 @@ Spanish: AlexZelder</property>
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkImage" id="menu-item-image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-dialog-authentication</property>
-  </object>
-  <object class="GtkImage" id="menu-item-image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-disconnect</property>
-  </object>
-  <object class="GtkImage" id="menu-item-image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-execute</property>
   </object>
   <object class="GtkMenu" id="keysMenu">
     <property name="visible">True</property>
@@ -794,6 +778,21 @@ Spanish: AlexZelder</property>
       </object>
     </child>
   </object>
+  <object class="GtkImage" id="menu-item-image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-dialog-authentication</property>
+  </object>
+  <object class="GtkImage" id="menu-item-image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-disconnect</property>
+  </object>
+  <object class="GtkImage" id="menu-item-image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-execute</property>
+  </object>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -819,6 +818,7 @@ Spanish: AlexZelder</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="on_disconnectButton_clicked" swapped="no"/>
@@ -835,6 +835,7 @@ Spanish: AlexZelder</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_keysButton_clicked" swapped="no"/>
                 <child>
@@ -882,6 +883,7 @@ Spanish: AlexZelder</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <property name="use_stock">True</property>
                 <signal name="toggled" handler="on_togglebutton1_toggled" swapped="no"/>
@@ -899,6 +901,7 @@ Spanish: AlexZelder</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_screenshotButton_clicked" swapped="no"/>
                 <child>
@@ -949,6 +952,7 @@ Spanish: AlexZelder</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="relief">none</property>
                 <signal name="clicked" handler="on_desktopIconButton_clicked" swapped="no"/>
                 <child>
@@ -1016,7 +1020,6 @@ Spanish: AlexZelder</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="events">GDK_ENTER_NOTIFY_MASK | GDK_STRUCTURE_MASK</property>
-            <property name="extension_events">cursor</property>
             <property name="has_tooltip">True</property>
             <child>
               <object class="GtkLabel" id="label5">
@@ -1055,8 +1058,6 @@ Spanish: AlexZelder</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="hscrollbar_policy">automatic</property>
-            <property name="vscrollbar_policy">automatic</property>
             <property name="shadow_type">etched-in</property>
             <child>
               <object class="GtkViewport" id="viewport1">
