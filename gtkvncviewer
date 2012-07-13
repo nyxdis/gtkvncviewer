@@ -23,7 +23,7 @@ version = "0.5.0"
 
 import sys, os
 from optparse import OptionParser
-from gi.repository import Gtk, GtkVnc, GObject, GdkPixbuf
+from gi.repository import Gtk, GtkVnc, GObject, GdkPixbuf, Gdk
 import gnomekeyring, gconf
 
 
@@ -47,7 +47,8 @@ class GtkVncViewer:
         def __init__(self):
                 self.parse_options()
                 # build GUI
-                self.uifile = os.path.join(sys.prefix, 'share', 'gtkvncviewer', 'gtkvncviewer.ui')
+                #self.uifile = os.path.join(sys.prefix, 'share', 'gtkvncviewer', 'gtkvncviewer.ui')
+                self.uifile = 'gtkvncviewer.ui'
                 self.wTree = Gtk.Builder()
                 self.wTree.set_translation_domain(APP)
                 self.wTree.add_from_file(self.uifile)
@@ -145,10 +146,10 @@ class GtkVncViewer:
                 if (self.fullscreenButton.get_active()):
                         self.window.fullscreen()
                         self.window_toolbar_note.show_all()
-                        self.window_toolbar.hide_all()
+                        self.window_toolbar.hide()
                 else:
                         self.window.unfullscreen()
-                        self.window_toolbar_note.hide_all()
+                        self.window_toolbar_note.hide()
                         self.window_toolbar.show_all()
                 return False
 
@@ -315,12 +316,12 @@ class GtkVncViewer:
 
         #if in fullscreen and mouse on top, show toolbar
         def mouse_moved_in_window(self, widget, data):
-                coords = self.window.window.get_pointer()
+                coords = self.window.get_window().get_pointer()
                 y = coords[1]
                 if y <= 5 and self.fullscreenButton.get_active():
                         self.window_toolbar.show_all()
                         #setup timer that will hide toolbar when ended
-                        GObject.timeout_add(2000, self.window_toolbar.hide_all) #2 sec.
+                        GObject.timeout_add(2000, self.window_toolbar.hide) #2 sec.
 
         def icon_on_desktop(self, data):
                 server = self.current_server
@@ -351,13 +352,13 @@ Categories=Network;
                 return True
 
         def vncconnect(self, window):
-                self.dialog.window.set_cursor(Gdk.Cursor.new(Gdk.WATCH))
+                self.dialog.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.WATCH))
                 username = self.wTree.get_object("usernameEntry").get_text()
                 password = self.wTree.get_object("pwdEntry").get_text()
                 server = self.wTree.get_object("serverEntry").get_text()
-                self.vnc.set_credential(gtkvnc.CREDENTIAL_USERNAME, username)
-                self.vnc.set_credential(gtkvnc.CREDENTIAL_PASSWORD, password)
-                self.vnc.set_credential(gtkvnc.CREDENTIAL_CLIENTNAME, "gtkvncviewer")
+                self.vnc.set_credential(GtkVnc.DisplayCredential.USERNAME, username)
+                self.vnc.set_credential(GtkVnc.DisplayCredential.PASSWORD, password)
+                self.vnc.set_credential(GtkVnc.DisplayCredential.CLIENTNAME, "gtkvncviewer")
                 print _("Connecting to %s...") % server
                 serverport = server.split(':')
                 server = serverport[0]
@@ -379,7 +380,7 @@ Categories=Network;
                 self.window.set_title(title)
                 self.window_label.set_markup ("<big><b>%s@%s</b></big>" % (username, server))
                 self.window.show_all()
-                self.window_toolbar_note.hide_all()
+                self.window_toolbar_note.hide()
                 self.window.resize (vnc.get_width(), vnc.get_height())
                 vnc.grab_focus()
 
@@ -394,7 +395,7 @@ Categories=Network;
                 dialog.destroy()
                 self.vnc.destroy()
                 self.vnc = GtkVnc.Display()
-                window.window.set_cursor(Gdk.Cursor.new(Gdk.ARROW))
+                window.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.ARROW))
 
         def vnc_connected(src, data, self):
                 print _("Connected")
