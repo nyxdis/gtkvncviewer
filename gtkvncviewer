@@ -23,8 +23,8 @@ version = '0.5.0'
 
 import sys, os
 from optparse import OptionParser
-from gi.repository import Gtk, GtkVnc, GObject, GdkPixbuf, Gdk
-import gnomekeyring, gconf
+from gi.repository import Gtk, GtkVnc, GObject, GdkPixbuf, Gdk, GnomeKeyring, GLib
+import gconf
 
 
 #internat'
@@ -46,8 +46,7 @@ class GtkVncViewer:
     def __init__(self):
         self.parse_options()
         # build GUI
-        #self.uifile = os.path.join(sys.prefix, 'share', 'gtkvncviewer', 'gtkvncviewer.ui')
-        self.uifile = 'gtkvncviewer.ui'
+        self.uifile = os.path.join(sys.prefix, 'share', 'gtkvncviewer', 'gtkvncviewer.ui')
         self.wTree = Gtk.Builder()
         self.wTree.set_translation_domain(APP)
         self.wTree.add_from_file(self.uifile)
@@ -100,7 +99,7 @@ class GtkVncViewer:
 
         #read stored credentials
         GCONF_AUTH_KEY = "/apps/gtkvncviewer"
-        keyring = gnomekeyring.get_default_keyring_sync()
+        (result, keyring) = GnomeKeyring.get_default_keyring_sync()
         gconfclient = gconf.client_get_default()
         gconfclient.add_dir (GCONF_AUTH_KEY,
                 gconf.CLIENT_PRELOAD_RECURSIVE)
@@ -112,15 +111,15 @@ class GtkVncViewer:
             server = server.replace (GCONF_AUTH_KEY+"/", "")
             auth_token = entries[i].get_value().get_int()
             if auth_token > 0:
-                try:
-                    secret = gnomekeyring.item_get_info_sync(keyring, auth_token).get_secret()
-                except gnomekeyring.DeniedError:
+                (result, info) = GnomeKeyring.item_get_info_sync(keyring, auth_token)
+                if result == GnomeKeyring.Result.OK:
+                    secret = info.get_secret()
+                    username, password = secret.split('\n')
+                else:
                     username = None
                     password = None
                     auth_token = 0
                     print _("gnome-keyring access denied")
-                else:
-                    username, password = secret.split('\n')
             else:
                 username = None
                 password = None
@@ -216,10 +215,10 @@ class GtkVncViewer:
         server = server.replace (GCONF_AUTH_KEY+"/", "")
         auth_token = entry.get_value().get_int()
         if auth_token > 0:
-            try:
-                #delete gnome-keyring entry
-                keyring = gnomekeyring.get_default_keyring_sync()
-                gnomekeyring.item_delete_sync(keyring, auth_token)
+            #delete gnome-keyring entry
+            (result, keyring) = GnomeKeyring.get_default_keyring_sync()
+            result = GnomeKeyring.item_delete_sync(keyring, auth_token)
+            if result == GnomeKeyring.Result.OK:
                 #delete gconf entry
                 gconfclient.unset(GCONF_AUTH_KEY+"/"+server)
                 #remove from icon view
@@ -230,7 +229,7 @@ class GtkVncViewer:
                 iter = self.model.get_iter(i)
                 self.model.remove(iter)
                 print server+" deleted"
-            except gnomekeyring.DeniedError:
+            else:
                 auth_token = 0
                 print _("gnome-keyring access denied, could not delete")
         else:
@@ -288,12 +287,15 @@ class GtkVncViewer:
 
         #now save it in gnome-keyring
         GCONF_AUTH_KEY = "/apps/gtkvncviewer/"+server
-        keyring = gnomekeyring.get_default_keyring_sync()
-        auth_token = gnomekeyring.item_create_sync(
+        (result, keyring) = GnomeKeyring.get_default_keyring_sync()
+        attrs = GnomeKeyring.Attribute.list_new()
+        GnomeKeyring.attribute_list_append_string(attrs, 'appname',
+                "gtkvncviewer, credentials of vnc server \""+server+"\"")
+        (result, auth_token) = GnomeKeyring.item_create_sync(
                 keyring,
-                gnomekeyring.ITEM_GENERIC_SECRET,
+                GnomeKeyring.ItemType.GENERIC_SECRET,
                 "gtkvncviewer VNC server credentials ("+server+")",
-                dict(appname="gtkvncviewer, credentials of vnc server \""+server+"\""),
+                attrs,
                 "\n".join((username, password)), True)
         gconf.client_get_default().set_int(GCONF_AUTH_KEY, auth_token)
 
