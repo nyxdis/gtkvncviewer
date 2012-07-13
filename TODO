@@ -3,7 +3,5 @@
 - optional avahi support?
 - gconf -> gsettings?
 - german translation
-- in screenshot()
-  - use glib functions instead of $HOME
 - avoid duplicate server entries
 - gconf via GIR

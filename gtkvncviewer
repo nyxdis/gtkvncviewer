@@ -155,14 +155,14 @@ class GtkVncViewer:
         self.keysMenu.popup(None, None, None, 0, 0, Gtk.get_current_event_time())
 
     def screenshot (self, data):
-        homeDir = os.environ.get('HOME', None) #=> can't work on Windows
+        home_dir = GLib.get_home_dir()
         pix = self.vnc.get_pixbuf()
-        pix.save(homeDir+"/vnc.png", "png", { "tEXt::Generator App": "gtkvncviewer" })
+        pix.save(home_dir+"/vnc.png", "png", { "tEXt::Generator App": "gtkvncviewer" })
         dialog = Gtk.MessageDialog (self.window,
                 Gtk.MessageType.INFO,
                 Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
                 Gtk.ButtonsType.OK,
-                _("Screenshot saved in %s" % (homeDir+"/vnc.png")))
+                _("Screenshot saved in %s" % (home_dir+"/vnc.png")))
         dialog.run()
         dialog.destroy()
         return False
