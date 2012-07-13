@@ -157,7 +157,7 @@ class GtkVncViewer:
     def screenshot (self, data):
         home_dir = GLib.get_home_dir()
         pix = self.vnc.get_pixbuf()
-        pix.save(home_dir+"/vnc.png", "png", { "tEXt::Generator App": "gtkvncviewer" })
+        pix.savev(home_dir+"/vnc.png", "png", [ "tEXt::Generator App" ], [ "gtkvncviewer" ])
         dialog = Gtk.MessageDialog (self.window,
                 Gtk.MessageType.INFO,
                 Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
