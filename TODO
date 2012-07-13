@@ -6,7 +6,6 @@
 - in screenshot()
   - use glib functions instead of $HOME
   - improve "Screenshot saved in" string for localization
-- fix indentation
 - avoid duplicate server entries
 - gnome-keyring via GIR
 - gconf via GIR
