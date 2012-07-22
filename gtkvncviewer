@@ -119,7 +119,7 @@ class GtkVncViewer:
                     username = None
                     password = None
                     auth_token = 0
-                    print _("gnome-keyring access denied")
+                    print _("GnomeKeyring access denied")
             else:
                 username = None
                 password = None
@@ -185,7 +185,6 @@ class GtkVncViewer:
     def delete_clicked (self, data):
         select = self.iconview.get_selected_items()
         if len(select) == 0:
-            print _("nothing to delete")
             return
 
         i = select[0]
@@ -202,7 +201,6 @@ class GtkVncViewer:
         r = dialog.run()
         dialog.destroy()
         if (r == Gtk.ResponseType.NO):
-            print _("deletion canceled")
             return
 
         GCONF_AUTH_KEY = "/apps/gtkvncviewer"
@@ -231,9 +229,9 @@ class GtkVncViewer:
                 print server+" deleted"
             else:
                 auth_token = 0
-                print _("gnome-keyring access denied, could not delete")
+                print _("GnomeKeyring access denied, could not delete")
         else:
-            print _("gconf read error, could not delete")
+            print _("GConf read error, could not delete")
 
     def activated (self, widget, data):
         self.vncconnect(self.window)
@@ -301,7 +299,6 @@ class GtkVncViewer:
 
     def quit():
         self.vnc.close()
-        print _("Bye.")
         if (self.window):
             self.window.destroy()
 
