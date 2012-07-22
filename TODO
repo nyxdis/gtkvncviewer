@@ -1,7 +1,7 @@
 - port to py3
 - build pixmaps dir dynamically
 - optional avahi support?
-- gconf -> gsettings?
-- german translation
 - avoid duplicate server entries
-- gconf via GIR
+- gconf
+  - replacement?
+  - GIR
