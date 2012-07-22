@@ -7,113 +7,124 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-15 23:53+0100\n"
+"POT-Creation-Date: 2012-07-23 00:38+0200\n"
 "PO-Revision-Date: 2008-07-21 17:51+0000\n"
 "Last-Translator: ubby <Unknown>\n"
 "Language-Team: Dutch\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ASCII\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2008-12-30 21:04+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: gtkvncviewer.py:86
-msgid "gnome-keyring access denied"
+#: gtkvncviewer:122
+#, fuzzy
+msgid "GnomeKeyring access denied"
 msgstr "gnome-keyring toegang geweigerd"
 
-#: gtkvncviewer.py:103
-msgid "Screenshot saved in"
+#: gtkvncviewer:165
+#, fuzzy, python-format
+msgid "Screenshot saved in %s"
 msgstr "De Screenshot is opgeslagen in"
 
-#: gtkvncviewer.py:110
-msgid "nothing to delete"
-msgstr "niets om te verwijderen"
+#: gtkvncviewer:172
+msgid "Sent Ctrl+Alt+Delete"
+msgstr ""
 
-#: gtkvncviewer.py:123
-msgid "Are you sure you want remove"
+#: gtkvncviewer:177
+msgid "Sent Ctrl+Alt+BackSpace"
+msgstr ""
+
+#: gtkvncviewer:182
+msgid "Sent Ctrl+Escape"
+msgstr ""
+
+#: gtkvncviewer:200
+#, fuzzy, python-format
+msgid "Are you sure you want remove the server \"%s\"?"
 msgstr "Weet u zeker dat u wilt verwijderen"
 
-#: gtkvncviewer.py:127
-msgid "deletion canceled"
-msgstr "het verwijderen is geannuleerd"
-
-#: gtkvncviewer.py:155
-msgid "gnome-keyring access denied, could not delete"
+#: gtkvncviewer:232
+#, fuzzy
+msgid "GnomeKeyring access denied, could not delete"
 msgstr "gnome-keyring toegang geweigerd, kan het niet verwijderen"
 
-#: gtkvncviewer.py:157
-msgid "gconf read error, could not delete"
+#: gtkvncviewer:234
+#, fuzzy
+msgid "GConf read error, could not delete"
 msgstr "gconf lees fout, kan het niet verwijderen"
 
-#: gtkvncviewer.py:240
+#: gtkvncviewer:327
+#, fuzzy, python-format
+msgid "Connect to the remote desktop: %s"
+msgstr "<big><b>Maak verbinding met een bureaublad op afstand (VNC)</b></big>"
+
+#: gtkvncviewer:361
+#, python-format
+msgid "Connecting to %s..."
+msgstr ""
+
+#: gtkvncviewer:375
 msgid "Connection initialized"
 msgstr ""
 
-#: gtkvncviewer.py:250
+#: gtkvncviewer:387
 msgid "Disconnected"
 msgstr "Verbinding verbroken"
 
-#: gtkvncviewer.py:255
+#: gtkvncviewer:392
 msgid "You have been disconnected"
 msgstr "Uw verbinding is verbroken"
 
-#: gtkvncviewer.py:261
+#: gtkvncviewer:400
 msgid "Connected"
 msgstr "Verbonden"
 
-#: gtkvncviewer.glade.h:1
-msgid "<big><b>Connect to a remote desktop (VNC)</b></big>"
+#: gtkvncviewer:408
+msgid "if server is known by gtkvncviewer, immediately connect to it"
 msgstr ""
-"<big><b>Maak verbinding met een bureaublad op afstand (VNC)</b></big>"
 
-#: gtkvncviewer.glade.h:2
-msgid "Small GTK tool to connect to VNC servers."
-msgstr "Een kleine GTK tool om te verbinden met de VNC servers."
-
-#: gtkvncviewer.glade.h:3
-msgid "_Password:"
-msgstr "_Wachtwoord:"
-
-#: gtkvncviewer.glade.h:4
-msgid "_Screenshot"
-msgstr "_Screenshot"
-
-#: gtkvncviewer.glade.h:5
-msgid "_Server:"
+#: gtkvncviewer:409
+#, fuzzy
+msgid "server"
 msgstr "_Server:"
 
-#: gtkvncviewer.glade.h:6
-msgid "_User name:"
-msgstr "_Gebruikersnaam:"
+#~ msgid "nothing to delete"
+#~ msgstr "niets om te verwijderen"
 
-#: gtkvncviewer.glade.h:7
-msgid "gtk-about"
-msgstr "over-gtk"
+#~ msgid "deletion canceled"
+#~ msgstr "het verwijderen is geannuleerd"
 
-#: gtkvncviewer.glade.h:8
-msgid "gtk-add"
-msgstr "gtk-toevoegen"
+#~ msgid "Small GTK tool to connect to VNC servers."
+#~ msgstr "Een kleine GTK tool om te verbinden met de VNC servers."
 
-#: gtkvncviewer.glade.h:9
-msgid "gtk-connect"
-msgstr "gtk-verbinden"
+#~ msgid "_Password:"
+#~ msgstr "_Wachtwoord:"
 
-#: gtkvncviewer.glade.h:10
-msgid "gtk-delete"
-msgstr "gtk-verwijder"
+#~ msgid "_Screenshot"
+#~ msgstr "_Screenshot"
 
-#: gtkvncviewer.glade.h:11
-msgid "gtk-disconnect"
-msgstr "gtk-verbinding verbreken"
+#~ msgid "_User name:"
+#~ msgstr "_Gebruikersnaam:"
 
-#: gtkvncviewer.glade.h:12
-msgid "gtk-quit"
-msgstr "gtk-afsluiten"
+#~ msgid "gtk-about"
+#~ msgstr "over-gtk"
 
-#: gtkvncviewer.glade.h:13
-msgid "gtkvncviewer"
-msgstr ""
+#~ msgid "gtk-add"
+#~ msgstr "gtk-toevoegen"
 
-#: gtkvncviewer.glade.h:14
-msgid "label"
-msgstr "label"
+#~ msgid "gtk-connect"
+#~ msgstr "gtk-verbinden"
+
+#~ msgid "gtk-delete"
+#~ msgstr "gtk-verwijder"
+
+#~ msgid "gtk-disconnect"
+#~ msgstr "gtk-verbinding verbreken"
+
+#~ msgid "gtk-quit"
+#~ msgstr "gtk-afsluiten"
+
+#~ msgid "label"
+#~ msgstr "label"
