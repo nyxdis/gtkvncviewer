@@ -279,12 +279,16 @@ class GtkVncViewer:
 
     def add_server (self, data):
         #add it to the iconview
-        pixbuf = self.iconview.render_icon(Gtk.STOCK_NETWORK, Gtk.IconSize.BUTTON)
         username = self.wTree.get_object("usernameEntry").get_text()
         password = self.wTree.get_object("pwdEntry").get_text()
         server = self.wTree.get_object("serverEntry").get_text()
         if server == "":
             return
+        if self.config.has_option('servers', server):
+            return
+
+        pixbuf = self.iconview.render_icon(Gtk.STOCK_NETWORK,
+                Gtk.IconSize.BUTTON)
         self.model.append([server, username, password, pixbuf])
 
         #now save it in gnome-keyring
