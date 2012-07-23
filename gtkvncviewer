@@ -23,7 +23,10 @@ version = '0.5.0'
 
 import sys, os
 from optparse import OptionParser
-from ConfigParser import RawConfigParser
+try:
+    from configparser import SafeConfigParser
+except ImportError:
+    from ConfigParser import RawConfigParser
 from gi.repository import Gtk, GtkVnc, GObject, GdkPixbuf, Gdk, GnomeKeyring, GLib
 
 
@@ -35,7 +38,10 @@ DIR = os.path.join(sys.prefix, 'share', 'locale')
 locale.setlocale(locale.LC_ALL, '')
 gettext.bindtextdomain(APP, DIR)
 gettext.textdomain(APP)
-gettext.install(APP, DIR, unicode=1)
+try:
+    gettext.install(APP, DIR, unicode=True)
+except TypeError:
+    gettext.install(APP, DIR)
 #locale.bindtextdomain(APP, DIR)
 
 def wait():
@@ -98,7 +104,10 @@ class GtkVncViewer:
             self.wTree.connect_signals(dic)
 
         # read stored credentials
-        self.config = RawConfigParser()
+        try:
+            self.config = RawConfigParser()
+        except NameError:
+            self.config = SafeConfigParser()
         self.config_path = os.path.join(GLib.get_user_config_dir(), 'gtkvncviewer')
         self.config_file = os.path.join(self.config_path, 'servers.conf')
         self.config.read(self.config_file)
@@ -121,7 +130,7 @@ class GtkVncViewer:
                     username = None
                     password = None
                     auth_token = 0
-                    print _("GnomeKeyring access denied")
+                    print(_("GnomeKeyring access denied"))
             else:
                 username = None
                 password = None
@@ -171,17 +180,17 @@ class GtkVncViewer:
 
     def send_cad (self, data):
         self.vnc.send_keys(["Control_L", "Alt_L", "Delete"])
-        print _("Sent Ctrl+Alt+Delete")
+        print(_("Sent Ctrl+Alt+Delete"))
         self.vnc.grab_focus()
 
     def send_cab (self, data):
         self.vnc.send_keys(["Control_L", "Alt_L", "BackSpace"])
-        print _("Sent Ctrl+Alt+BackSpace")
+        print(_("Sent Ctrl+Alt+BackSpace"))
         self.vnc.grab_focus()
 
     def send_ce (self, data):
         self.vnc.send_keys(["Control_L", "Escape"])
-        print _("Sent Ctrl+Escape")
+        print(_("Sent Ctrl+Escape"))
         self.vnc.grab_focus()
 
     def delete_clicked (self, data):
@@ -221,12 +230,12 @@ class GtkVncViewer:
                 i = select[0]
                 iter = self.model.get_iter(i)
                 self.model.remove(iter)
-                print server+" deleted"
+                print(server+" deleted")
             else:
                 auth_token = 0
-                print _("GnomeKeyring access denied, could not delete")
+                print(_("GnomeKeyring access denied, could not delete"))
         else:
-            print _("Config read error, could not delete")
+            print(_("Config read error, could not delete"))
 
     def activated (self, widget, data):
         self.vncconnect(self.window)
@@ -309,7 +318,7 @@ class GtkVncViewer:
         quit()
 
     def show_hide_toolbar(self, widget, data):
-        print "show_hide_toolbar"
+        print("show_hide_toolbar")
         return False
 
     #if in fullscreen and mouse on top, show toolbar
@@ -357,7 +366,7 @@ Categories=Network;
         self.vnc.set_credential(GtkVnc.DisplayCredential.USERNAME, username)
         self.vnc.set_credential(GtkVnc.DisplayCredential.PASSWORD, password)
         self.vnc.set_credential(GtkVnc.DisplayCredential.CLIENTNAME, "gtkvncviewer")
-        print _("Connecting to %s...") % server
+        print(_("Connecting to %s...") % server)
         serverport = server.split(':')
         server = serverport[0]
         try:
@@ -371,7 +380,7 @@ Categories=Network;
         self.vnc.connect("vnc-disconnected", self.vnc_disconnected, self.dialog, self)
 
     def vnc_initialized (src, vnc, username, server, self):
-        print _("Connection initialized")
+        print(_("Connection initialized"))
         title = "%s@%s - gtkvncviewer" % (username, server)
         self.current_server = server
         self.dialog.hide()
@@ -383,7 +392,7 @@ Categories=Network;
         vnc.grab_focus()
 
     def vnc_disconnected(src, vnc, window, self):
-        print _("Disconnected")
+        print(_("Disconnected"))
         dialog = Gtk.MessageDialog (window,
                 Gtk.MessageType.INFO,
                 Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
@@ -396,7 +405,7 @@ Categories=Network;
         window.get_window().set_cursor(Gdk.Cursor.new(Gdk.CursorType.ARROW))
 
     def vnc_connected(src, data, self):
-        print _("Connected")
+        print(_("Connected"))
         self.layout.add(self.vnc)
         self.vnc.realize()
 
