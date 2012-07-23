@@ -2,6 +2,3 @@
 - build pixmaps dir dynamically
 - optional avahi support?
 - avoid duplicate server entries
-- gconf
-  - replacement?
-  - GIR

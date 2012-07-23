@@ -23,8 +23,8 @@ version = '0.5.0'
 
 import sys, os
 from optparse import OptionParser
+from ConfigParser import RawConfigParser
 from gi.repository import Gtk, GtkVnc, GObject, GdkPixbuf, Gdk, GnomeKeyring, GLib
-import gconf
 
 
 #internat'
@@ -97,19 +97,21 @@ class GtkVncViewer:
                     }
             self.wTree.connect_signals(dic)
 
-        #read stored credentials
-        GCONF_AUTH_KEY = "/apps/gtkvncviewer"
+        # read stored credentials
+        self.config = RawConfigParser()
+        self.config_path = os.path.join(GLib.get_user_config_dir(), 'gtkvncviewer')
+        self.config_file = os.path.join(self.config_path, 'servers.conf')
+        self.config.read(self.config_file)
+        if not self.config.has_section('servers'):
+            return
+
         (result, keyring) = GnomeKeyring.get_default_keyring_sync()
-        gconfclient = gconf.client_get_default()
-        gconfclient.add_dir (GCONF_AUTH_KEY,
-                gconf.CLIENT_PRELOAD_RECURSIVE)
-        entries = gconfclient.all_entries(GCONF_AUTH_KEY)
+        entries = self.config.items('servers')
         if len(entries) == 0:
             return #found nothing
         for i in range(len(entries)):
-            server = entries[i].get_key()
-            server = server.replace (GCONF_AUTH_KEY+"/", "")
-            auth_token = entries[i].get_value().get_int()
+            server, auth_token = entries[i]
+            auth_token = int(auth_token)
             if auth_token > 0:
                 (result, info) = GnomeKeyring.item_get_info_sync(keyring, auth_token)
                 if result == GnomeKeyring.Result.OK:
@@ -203,22 +205,15 @@ class GtkVncViewer:
         if (r == Gtk.ResponseType.NO):
             return
 
-        GCONF_AUTH_KEY = "/apps/gtkvncviewer"
-        gconfclient = gconf.client_get_default()
-        gconfclient.add_dir (GCONF_AUTH_KEY,
-                gconf.CLIENT_PRELOAD_RECURSIVE)
-        entry = gconfclient.get_entry(GCONF_AUTH_KEY+"/"+server,
-                "", False)
-        server = entry.get_key()
-        server = server.replace (GCONF_AUTH_KEY+"/", "")
-        auth_token = entry.get_value().get_int()
+        auth_token = self.config.getint('servers', server)
         if auth_token > 0:
             #delete gnome-keyring entry
             (result, keyring) = GnomeKeyring.get_default_keyring_sync()
             result = GnomeKeyring.item_delete_sync(keyring, auth_token)
             if result == GnomeKeyring.Result.OK:
-                #delete gconf entry
-                gconfclient.unset(GCONF_AUTH_KEY+"/"+server)
+                # delete conf entry
+                self.config.remove_option('servers', server)
+                self.config.write(open(self.config_file, 'w'))
                 #remove from icon view
                 select = self.iconview.get_selected_items()
                 if len(select) == 0:
@@ -231,7 +226,7 @@ class GtkVncViewer:
                 auth_token = 0
                 print _("GnomeKeyring access denied, could not delete")
         else:
-            print _("GConf read error, could not delete")
+            print _("Config read error, could not delete")
 
     def activated (self, widget, data):
         self.vncconnect(self.window)
@@ -284,7 +279,6 @@ class GtkVncViewer:
         self.model.append([server, username, password, pixbuf])
 
         #now save it in gnome-keyring
-        GCONF_AUTH_KEY = "/apps/gtkvncviewer/"+server
         (result, keyring) = GnomeKeyring.get_default_keyring_sync()
         attrs = GnomeKeyring.Attribute.list_new()
         GnomeKeyring.attribute_list_append_string(attrs, 'appname',
@@ -295,7 +289,12 @@ class GtkVncViewer:
                 "gtkvncviewer VNC server credentials ("+server+")",
                 attrs,
                 "\n".join((username, password)), True)
-        gconf.client_get_default().set_int(GCONF_AUTH_KEY, auth_token)
+        if not self.config.has_section('servers'):
+            self.config.add_section('servers')
+        if not os.path.exists(self.config_path):
+            os.makedirs(self.config_path)
+        self.config.set('servers', server, auth_token)
+        self.config.write(open(self.config_file, 'w'))
 
     def quit():
         self.vnc.close()
