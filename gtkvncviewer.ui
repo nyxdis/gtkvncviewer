@@ -10,7 +10,7 @@
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="destroy_with_parent">True</property>
-    <property name="icon">/usr/share/pixmaps/gtkvncviewer_64.png</property>
+    <property name="icon">../pixmaps/gtkvncviewer_64.png</property>
     <property name="type_hint">dialog</property>
     <property name="program_name">Gtk VNC Viewer</property>
     <property name="version">0.2.3</property>
@@ -311,7 +311,7 @@ Polish: Kamil Skrzypiński
 Russian: Sergei Zivukov
 Simplified Chinese: Tao Wei
 Spanish: AlexZelder</property>
-    <property name="logo">/usr/share/pixmaps/gtkvncviewer_128.png</property>
+    <property name="logo">../pixmaps/gtkvncviewer_128.png</property>
     <signal name="delete-event" handler="on_aboutDialog_delete_event" swapped="no"/>
     <signal name="response" handler="on_aboutDialog_response" swapped="no"/>
     <child internal-child="vbox">
@@ -349,7 +349,7 @@ Spanish: AlexZelder</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="title" translatable="yes">gtkvncviewer</property>
     <property name="resizable">False</property>
-    <property name="icon">/usr/share/pixmaps/gtkvncviewer_64.png</property>
+    <property name="icon">../pixmaps/gtkvncviewer_64.png</property>
     <property name="type_hint">dialog</property>
     <property name="has_resize_grip">False</property>
     <signal name="destroy" handler="on_connectDialog_destroy" swapped="no"/>
@@ -387,7 +387,7 @@ Spanish: AlexZelder</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="xalign">0.94999998807907104</property>
-                <property name="pixbuf">/usr/share/pixmaps/gtkvncviewer_64.png</property>
+                <property name="pixbuf">../pixmaps/gtkvncviewer_64.png</property>
                 <property name="icon-size">6</property>
               </object>
               <packing>
@@ -796,7 +796,7 @@ Spanish: AlexZelder</property>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property name="icon">/usr/share/pixmaps/gtkvncviewer_64.png</property>
+    <property name="icon">../pixmaps/gtkvncviewer_64.png</property>
     <signal name="delete-event" handler="on_window_delete_event" swapped="no"/>
     <signal name="motion-notify-event" handler="on_window_motion_notify_event" swapped="no"/>
     <child>
